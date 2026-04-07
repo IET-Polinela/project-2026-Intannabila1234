@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daftar Laporan</title>
+</head>
+<body>
+    <h1>Daftar Laporan</h1>
+
+    <a href="{% url 'add_report' %}">Tambah Laporan</a>
+
+    <ul>
+        {% for report in reports %}
+            <li>
+                <b>{{ report.title }}</b> - {{ report.category }} <br>
+                {{ report.description }} <br>
+                Lokasi: {{ report.location }} <br>
+                Status: {{ report.status }} <br>
+
+                <a href="{% url 'edit_report' report.id %}">Edit</a>
+                <a href="{% url 'delete_report' report.id %}">Hapus</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
