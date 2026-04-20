@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'reports_list' %}">Reports</a></li>
+                <li class="breadcrumb-item active">Form</li>
+            </ol>
+        </nav>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{% if report %}Edit{% else %}Tambah{% endif %} Laporan</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="reportForm">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Judul</label>
+                        <input type="text" name="title" class="form-control" value="{{ report.title|default:'' }}" placeholder="Contoh: Lampu Jalan Mati" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Lokasi</label>
+                        <input type="text" name="location" class="form-control" value="{{ report.location|default:'' }}" placeholder="Contoh: Jl. ZA Pagar Alam" required>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <button type="submit" class="btn btn-primary" id="btnSubmit">
+                            <span id="btnText">Simpan Data</span>
+                        </button>
+                        <a href="{% url 'reports_list' %}" class="btn btn-secondary">Kembali</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('reportForm');
+    const btn = document.getElementById('btnSubmit');
+    const btnText = document.getElementById('btnText');
+
+    form.onsubmit = function() {
+        // Tombol berubah jadi loading saat diklik
+        btn.disabled = true;
+        btn.classList.add('btn-info'); // Opsional: ganti warna saat loading
+        btnText.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Loading...';
+    };
+</script>
+{% endblock %}

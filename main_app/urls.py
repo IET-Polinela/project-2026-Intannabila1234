@@ -1,40 +1,15 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Report
-from .forms import ReportForm
+from django.urls import path
+from . import views
 
-# READ
-def home(request):
-    reports = Report.objects.all()
-    return render(request, 'main_app/home.html', {'reports': reports})
+urlpatterns = [
+    # Path untuk fitur laporan
+    path('reports/', views.reports_list, name='reports_list'),
+    path('create/', views.create_report, name='create'),
+    path('update/<int:id>/', views.update_report, name='update'),
+    path('delete/<int:id>/', views.delete_report, name='delete'),
 
-
-# CREATE
-def add_report(request):
-    if request.method == "POST":
-        form = ReportForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = ReportForm()
-    return render(request, 'main_app/add_report.html', {'form': form})
-
-
-# UPDATE
-def update_report(request, id):
-    report = get_object_or_404(Report, id=id)
-    if request.method == "POST":
-        form = ReportForm(request.POST, instance=report)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = ReportForm(instance=report)
-    return render(request, 'main_app/update_report.html', {'form': form})
-
-
-# DELETE
-def delete_report(request, id):
-    report = get_object_or_404(Report, id=id)
-    report.delete()
-    return redirect('home')
+    # Path untuk workflow status
+    path('verify/<int:id>/', views.verify_report, name='verify'),
+    path('progress/<int:id>/', views.progress_report, name='progress'),
+    path('resolve/<int:id>/', views.resolve_report, name='resolve'),
+]
