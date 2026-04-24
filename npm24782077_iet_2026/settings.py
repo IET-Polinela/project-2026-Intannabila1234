@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import psycopg2
 
 # Path Dasar Proyek
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,8 +20,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'main_app',
-    'contacts',
+    # custom user model harus di atas app lain
+    'usermanagement_24782077.apps.Usermanagement24782077Config',
+    # apps kamu (FIX: pakai AppConfig)
+    'main_app.apps.MainAppConfig',
+    'contacts.apps.ContactsConfig',
 ]
 
 MIDDLEWARE = [
@@ -35,12 +39,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'npm24782077_iet_2026.urls'
 
-# KONFIGURASI TEMPLATE (WAJIB ADA UNTUK BASE.HTML)
+# TEMPLATE CONFIG
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # Menambahkan BASE_DIR / 'templates' agar folder global terbaca
-        'DIRS': [BASE_DIR / 'templates'], 
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -55,7 +58,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'npm24782077_iet_2026.wsgi.application'
 
-# Database
+# DATABASE SQLITE UNTUK LAB
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -63,7 +66,7 @@ DATABASES = {
     }
 }
 
-# Password Validation
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -71,19 +74,21 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internasionalisasi
+# Internationalisasi
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+
+TIME_ZONE = 'Asia/Jakarta'   # FIX INDONESIA
+
 USE_I18N = True
 USE_TZ = True
 
-# Static Files
+# Static files
 STATIC_URL = '/static/'
 
+# Default primary key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# KONFIGURASI PESAN (ALERTS)
-# Ini agar Django Messages otomatis sinkron dengan warna Bootstrap
+# Messages Bootstrap mapping
 from django.contrib.messages import constants as messages
 
 MESSAGE_TAGS = {
@@ -93,3 +98,15 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'danger',
 }
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# CSRF Settings for development
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
+CSRF_COOKIE_SECURE = False
+CSRF_USE_SESSIONS = False
+SESSION_COOKIE_SECURE = False
+
+# AUTH MODEL SAFE
+AUTH_USER_MODEL = 'usermanagement_24782077.User'

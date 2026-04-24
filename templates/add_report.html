@@ -1,17 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Tambah Laporan</title>
-</head>
-<body>
-    <h1>Form Laporan</h1>
+{% extends 'base.html' %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Simpan</button>
-    </form>
-
-    <a href="{% url 'report_list' %}">Kembali</a>
-</body>
-</html>
+{% block content %}
+<div class="container mt-4">
+    <h2>Tambah Laporan Baru</h2>
+    <hr>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="title" class="form-label">Judul Laporan</label>
+                    <input type="text" name="title" id="title" class="form-control" placeholder="Contoh: Lampu Jalan Mati" required>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Lokasi</label>
+                    <input type="text" name="location" id="location" class="form-control" placeholder="Contoh: Jl. Soekarno Hatta" required>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Simpan Laporan</button>
+                    <a href="{% url 'reports_list' %}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
