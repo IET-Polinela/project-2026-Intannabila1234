@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Laporan Publik{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- Page Title -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1 class="display-4">📊 Dashboard Laporan Publik</h1>
+            <p class="text-muted">Lab Session 7 - Pemrograman Internet 1 | Visualisasi Data & API</p>
+            <hr>
+        </div>
+    </div>
+
+    <!-- Statistik Cards -->
+    <div class="row mb-4" id="statistics-container">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">📝 Total Laporan</h5>
+                    <h2 class="card-text">{{ total_reports }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">🔔 Reported</h5>
+                    <h2 class="card-text">{{ total_reported }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">⚙️ In Progress</h5>
+                    <h2 class="card-text">{{ total_in_progress }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">✅ Resolved</h5>
+                    <h2 class="card-text">{{ total_resolved }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mb-4">
+        <!-- Status Chart (Doughnut) -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">📈 Statistik Status Laporan</h5>
+                    <small class="text-muted">Distribusi laporan berdasarkan status</small>
+                </div>
+                <div class="card-body">
+                    <canvas id="statusChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Chart (Bar) -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">📊 Statistik Kategori Laporan</h5>
+                    <small class="text-muted">Distribusi laporan berdasarkan kategori</small>
+                </div>
+                <div class="card-body">
+                    <canvas id="categoryChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Search Section -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">🔍 Live Search Laporan</h5>
+                    <small class="text-muted">Cari laporan secara real-time tanpa reload</small>
+                </div>
+                <div class="card-body">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="form-control form-control-lg" 
+                        placeholder="Cari berdasarkan judul, lokasi, atau kategori..."
+                        autocomplete="off"
+                    >
+                    <div id="searchResults" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest Reports Section -->
+    <div class="row">
+        <!-- Latest Reported -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">🔔 5 Laporan Terbaru (REPORTED)</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div id="latestReportedList" class="list-group list-group-flush">
+                        <p class="text-muted text-center py-3">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Latest Resolved -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">✅ 5 Laporan Terbaru (RESOLVED)</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div id="latestResolvedList" class="list-group list-group-flush">
+                        <p class="text-muted text-center py-3">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal untuk Detail Laporan -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel">Detail Laporan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalContent">
+                    <p class="text-muted">Loading...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+<!-- Dashboard Script -->
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

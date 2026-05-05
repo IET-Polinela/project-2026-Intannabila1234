@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Laporan - Chart.js Demo</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+    <style>
+        body { background-color: #f8f9fa; }
+        .chart-container { position: relative; height: 300px; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid mt-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h1 class="display-4">📊 Dashboard Laporan Publik</h1>
+            <p class="text-muted">Chart.js + Fetch API Demo | Tanpa Reload Halaman</p>
+            <hr>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <!-- Total Laporan Card -->
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Total Laporan</h6>
+                            <h2 class="mt-2 mb-0" id="totalReports">0</h2>
+                        </div>
+                        <div style="font-size: 3rem; opacity: 0.3;">📋</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reported Card -->
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Laporan Baru</h6>
+                            <h2 class="mt-2 mb-0" id="reportedCount">0</h2>
+                        </div>
+                        <div style="font-size: 3rem; opacity: 0.3;">🔔</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- In Progress Card -->
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Sedang Dikerjakan</h6>
+                            <h2 class="mt-2 mb-0" id="inProgressCount">0</h2>
+                        </div>
+                        <div style="font-size: 3rem; opacity: 0.3;">⚙️</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resolved Card -->
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title mb-0">Selesai</h6>
+                            <h2 class="mt-2 mb-0" id="resolvedCount">0</h2>
+                        </div>
+                        <div style="font-size: 3rem; opacity: 0.3;">✅</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mb-4">
+        <!-- Status Chart (Doughnut) -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">📈 Statistik Status Laporan</h5>
+                    <small class="text-muted">Distribusi laporan berdasarkan status</small>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Chart (Bar) -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">📊 Statistik Kategori Laporan</h5>
+                    <small class="text-muted">Distribusi laporan berdasarkan kategori</small>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Refresh Button -->
+    <div class="row mb-4">
+        <div class="col-md-12 text-center">
+            <button id="refreshBtn" class="btn btn-primary btn-lg">
+                🔄 Refresh Data (Tanpa Reload Halaman)
+            </button>
+        </div>
+    </div>
+
+    <!-- Debug Info -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🔍 Debug Info</h5>
+                </div>
+                <div class="card-body">
+                    <pre id="debugInfo">Loading...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript untuk Chart.js + Fetch API -->
+<script>
+/**
+ * Dashboard Chart.js Integration dengan Fetch API
+ * Mengambil data dari Django JsonResponse endpoint
+ * Tanpa reload halaman
+ */
+
+// ========================================
+// GLOBAL VARIABLES
+// ========================================
+let statusChart = null;
+let categoryChart = null;
+
+// ========================================
+// 1. FETCH DATA DARI DJANGO API
+// ========================================
+
+/**
+ * Fetch dashboard data dari endpoint JsonResponse
+ * Endpoint: /dashboard/api/data/
+ */
+async function fetchDashboardData() {
+    try {
+        console.log('🔄 Fetching dashboard data...');
+
+        const response = await fetch('/dashboard/api/data/');
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('✅ Dashboard data received:', data);
+
+        // Update debug info
+        document.getElementById('debugInfo').textContent = JSON.stringify(data, null, 2);
+
+        return data;
+
+    } catch (error) {
+        console.error('❌ Error fetching dashboard data:', error);
+        document.getElementById('debugInfo').textContent = `Error: ${error.message}`;
+        return null;
+    }
+}
+
+// ========================================
+// 2. UPDATE STATISTICS CARDS
+// ========================================
+
+/**
+ * Update statistics cards dengan data dari API
+ */
+function updateStatisticsCards(data) {
+    if (!data) return;
+
+    // Update total reports
+    document.getElementById('totalReports').textContent = data.total || 0;
+
+    // Update status counts
+    const status = data.status || {};
+    document.getElementById('reportedCount').textContent = status.REPORTED || 0;
+    document.getElementById('inProgressCount').textContent = status.IN_PROGRESS || 0;
+    document.getElementById('resolvedCount').textContent = status.RESOLVED || 0;
+
+    console.log('📊 Statistics cards updated');
+}
+
+// ========================================
+// 3. RENDER STATUS CHART (DOUGHNUT)
+// ========================================
+
+async function renderStatusChart() {
+    const data = await fetchDashboardData();
+
+    if (!data) {
+        console.warn('⚠️ No data for status chart');
+        return;
+    }
+
+    const ctx = document.getElementById('statusChart');
+    if (!ctx) {
+        console.error('❌ Status chart canvas not found');
+        return;
+    }
+
+    // Destroy existing chart
+    if (statusChart) {
+        statusChart.destroy();
+    }
+
+    const statusData = data.status;
+    const labels = Object.keys(statusData);
+    const values = Object.values(statusData);
+
+    // Color mapping untuk status
+    const colors = {
+        'REPORTED': '#FFC107',      // Yellow
+        'VERIFIED': '#17A2B8',      // Teal
+        'IN_PROGRESS': '#007BFF',   // Blue
+        'RESOLVED': '#28A745',      // Green
+    };
+
+    statusChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                backgroundColor: labels.map(label => colors[label] || '#6C757D'),
+                borderColor: '#fff',
+                borderWidth: 2,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.parsed || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${context.label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    console.log('📈 Status chart rendered');
+}
+
+// ========================================
+// 4. RENDER CATEGORY CHART (BAR)
+// ========================================
+
+async function renderCategoryChart() {
+    const data = await fetchDashboardData();
+
+    if (!data) {
+        console.warn('⚠️ No data for category chart');
+        return;
+    }
+
+    const ctx = document.getElementById('categoryChart');
+    if (!ctx) {
+        console.error('❌ Category chart canvas not found');
+        return;
+    }
+
+    // Destroy existing chart
+    if (categoryChart) {
+        categoryChart.destroy();
+    }
+
+    const categoryData = data.categories;
+    const labels = Object.keys(categoryData);
+    const values = Object.values(categoryData);
+
+    // Generate colors untuk kategori
+    const colors = [
+        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+        '#9966FF', '#FF9F40', '#C9CBCF', '#FF6384'
+    ];
+
+    categoryChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Jumlah Laporan',
+                data: values,
+                backgroundColor: colors.slice(0, labels.length),
+                borderColor: colors.slice(0, labels.length),
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            indexAxis: 'y',  // Horizontal bar chart
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false  // Hide legend untuk bar chart
+                }
+            }
+        }
+    });
+
+    console.log('📊 Category chart rendered');
+}
+
+// ========================================
+// 5. REFRESH ALL DATA (TANPA RELOAD)
+// ========================================
+
+async function refreshAllData() {
+    console.log('🔄 Refreshing all dashboard data...');
+
+    // Show loading state
+    document.getElementById('refreshBtn').innerHTML = '⏳ Loading...';
+    document.getElementById('refreshBtn').disabled = true;
+
+    try {
+        // Fetch data sekali saja
+        const data = await fetchDashboardData();
+
+        if (data) {
+            // Update cards
+            updateStatisticsCards(data);
+
+            // Render charts
+            await renderStatusChart();
+            await renderCategoryChart();
+
+            console.log('✅ All data refreshed successfully');
+        }
+
+    } catch (error) {
+        console.error('❌ Error refreshing data:', error);
+    } finally {
+        // Reset button
+        document.getElementById('refreshBtn').innerHTML = '🔄 Refresh Data (Tanpa Reload Halaman)';
+        document.getElementById('refreshBtn').disabled = false;
+    }
+}
+
+// ========================================
+// 6. INITIALIZATION (DOMContentLoaded)
+// ========================================
+
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🚀 Dashboard initialized');
+
+    // Initial load
+    await refreshAllData();
+
+    // Setup refresh button
+    document.getElementById('refreshBtn').addEventListener('click', refreshAllData);
+
+    console.log('✅ Dashboard ready');
+});
+
+// ========================================
+// 7. ERROR HANDLING
+// ========================================
+
+// Handle fetch errors globally
+window.addEventListener('unhandledrejection', function(event) {
+    console.error('🚨 Unhandled promise rejection:', event.reason);
+    document.getElementById('debugInfo').textContent = `Error: ${event.reason}`;
+});
+</script>
+
+</body>
+</html>

@@ -9,7 +9,7 @@ SECRET_KEY = 'django-insecure-((em28vx0#y9zqv#0#_&^e5lv1z28e!_9(va5oh3n=uz2!31ny
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']  # Added for development
 
 # Pendaftaran Aplikasi
 INSTALLED_APPS = [
@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     # apps kamu (FIX: pakai AppConfig)
     'main_app.apps.MainAppConfig',
     'contacts.apps.ContactsConfig',
+    'dashboard_24782077.apps.Dashboard24782077Config',  # NEW - Dashboard App
 ]
 
 MIDDLEWARE = [

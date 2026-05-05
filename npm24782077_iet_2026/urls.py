@@ -9,6 +9,8 @@ urlpatterns = [
     # Ubah views.home menjadi views.reports_list agar sinkron dengan views.py
     path('', views.reports_list, name='home'), 
     path('main/', include('main_app.urls', namespace='main_app')),
+    # Dashboard URLs - NEW
+    path('dashboard/', include('dashboard_24782077.urls', namespace='dashboard')),
     # Authentication URLs
     path('login/', login_view, name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
