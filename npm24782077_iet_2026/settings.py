@@ -26,6 +26,9 @@ INSTALLED_APPS = [
     'main_app.apps.MainAppConfig',
     'contacts.apps.ContactsConfig',
     'dashboard_24782077.apps.Dashboard24782077Config',  # NEW - Dashboard App
+    
+    # REST Framework - Lab 9
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

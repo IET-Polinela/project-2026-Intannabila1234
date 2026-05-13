@@ -1,18 +1,33 @@
+from django.conf import settings
 from django.db import models
 
 class Report(models.Model):
     STATUS_CHOICES = [
-        ('REPORTED', 'REPORTED'),
-        ('VERIFIED', 'VERIFIED'),
-        ('IN_PROGRESS', 'IN_PROGRESS'),
-        ('RESOLVED', 'RESOLVED'),
+        ('DRAFT', 'Draft'),
+        ('REPORTED', 'Reported'),
+        ('VERIFIED', 'Verified'),
+        ('IN_PROGRESS', 'In Progress'),
+        ('RESOLVED', 'Resolved'),
     ]
 
-    title = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    category = models.CharField(max_length=50, blank=True)
-    description = models.TextField(blank=True)
+    title = models.CharField(max_length=200)
+    category = models.CharField(max_length=100)
+    description = models.TextField()
+    location = models.CharField(max_length=200)
+    reporter = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='reports',
+        null=True,
+        blank=True
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='REPORTED'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return f"{self.title} - {self.status}"
