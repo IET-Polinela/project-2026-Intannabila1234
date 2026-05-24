@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from datetime import timedelta
 import psycopg2
 
 # Path Dasar Proyek
@@ -29,6 +30,10 @@ INSTALLED_APPS = [
     
     # REST Framework - Lab 9
     'rest_framework',
+    # Local API apps for Lab 10
+    'reports',
+    'usermanagement',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -114,3 +119,19 @@ SESSION_COOKIE_SECURE = False
 
 # AUTH MODEL SAFE
 AUTH_USER_MODEL = 'usermanagement_24782077.User'
+
+# Django REST Framework + Simple JWT configuration (Lab 10)
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
