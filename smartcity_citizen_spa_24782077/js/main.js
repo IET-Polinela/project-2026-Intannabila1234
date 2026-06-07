@@ -6,7 +6,7 @@ import { initRouter } from './router.js';
 function initApp() {
   // Demo credentials and profile data for local development only.
   if (!localStorage.getItem('demo_email')) {
-    localStorage.setItem('demo_email', 'warga@example.com');
+    localStorage.setItem('demo_email', 'citizen_lab10@gmail.com');
   }
   if (!localStorage.getItem('demo_password')) {
     localStorage.setItem('demo_password', 'CitizenPass123');

@@ -4,10 +4,9 @@ from main_app import views  # Pastikan import ini ada
 from django.contrib.auth.views import LoginView, LogoutView
 from usermanagement_24782077.views import register, login_view
 from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
     TokenRefreshView,
 )
-from usermanagement.api_views import RegisterView
+from usermanagement.api_views import RegisterView, EmailTokenObtainPairView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,7 +22,7 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('api/', include('main_app.api_urls')),
     # JWT token endpoints (Lab 10)
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', EmailTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # API routers for reports and usermanagement
     path('api/reports/', include('reports.urls')),

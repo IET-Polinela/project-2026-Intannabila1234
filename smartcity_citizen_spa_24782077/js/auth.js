@@ -78,7 +78,7 @@ export function setupLoginForm() {
 
     try {
       const data = await requestAPI('http://127.0.0.1:8000/api/token/', 'POST', {
-        username: email,
+        email,
         password,
       });
 
@@ -89,13 +89,14 @@ export function setupLoginForm() {
 
       localStorage.setItem('access_token', access);
       if (refresh) localStorage.setItem('refresh_token', refresh);
-      localStorage.setItem('profile_email', email);
+      localStorage.setItem('demo_email', email);
 
       alert('Login Berhasil');
       location.hash = '#dashboard';
     } catch (err) {
       console.error('Login error', err);
-      alert('Login Gagal');
+      const message = (err && err.data && err.data.detail) || err.message || 'Login Gagal';
+      alert(`Login Gagal: ${message}`);
     }
   });
 }
