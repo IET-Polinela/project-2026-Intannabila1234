@@ -1,6 +1,6 @@
 // main.js
 // Entry point: initialize router and app-wide behaviors.
-import { initRouter } from './router.js';
+import { initRouter } from './router.js?v=5';
 
 // Init application
 function initApp() {

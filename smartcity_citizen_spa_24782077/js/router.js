@@ -1,7 +1,7 @@
 // router.js
 // Simple hash-based router for two routes: #login and #dashboard
-import { renderLogin, setupLoginForm } from './auth.js';
-import { renderDashboard, setupDashboard } from './dashboard.js';
+import { renderLogin, setupLoginForm } from './auth.js?v=5';
+import { renderDashboard, setupDashboard } from './dashboard.js?v=5';
 
 export function handleRouting() {
   const hash = window.location.hash || '#login';
@@ -42,6 +42,6 @@ export function handleRouting() {
 
 // Initialize listeners
 export function initRouter() {
+  handleRouting();
   window.addEventListener('hashchange', handleRouting);
-  window.addEventListener('DOMContentLoaded', handleRouting);
 }

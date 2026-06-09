@@ -13,7 +13,7 @@ python -m http.server 5500
 
 3. Buka browser ke:
 
-http://127.0.0.1:5500/smartcity_citizen_spa_npm/index.html
+http://127.0.0.1:5500/
 
 Catatan:
 - Endpoint token login di `auth.js` menggunakan `http://127.0.0.1:8000/api/token/`. Pastikan backend Django REST API berjalan dan mengizinkan CORS.
@@ -22,7 +22,7 @@ Catatan:
 Quick testing helper:
 
 - The SPA will populate demo credentials into `localStorage` automatically on first load for convenience.
-	- Demo username: `citizenlab10`
+- Demo email: `citizen_lab10@gmail.com`
 	- Demo password: `CitizenPass123`
 
 When you open the login page, the form inputs will be prefilled with these demo credentials.

@@ -1,6 +1,6 @@
 // auth.js
 // Handles rendering login form and login submission.
-import { requestAPI } from './api.js';
+import { requestAPI } from './api.js?v=5';
 
 // Render the login HTML (returned as string)
 export function renderLogin() {

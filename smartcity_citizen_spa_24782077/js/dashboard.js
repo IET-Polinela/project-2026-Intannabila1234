@@ -1,4 +1,4 @@
-import { loadDashboardData, setupReportForm, submitReportForm, resetEditingReportId, resetReportForm } from './app.js';
+import { loadDashboardData, setupReportForm, submitReportForm, resetEditingReportId, resetReportForm } from './app.js?v=5';
 
 // dashboard.js
 // Renders dashboard layout and wiring logout and report interactions.

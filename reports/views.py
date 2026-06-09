@@ -30,7 +30,6 @@ class ReportViewSet(viewsets.ModelViewSet):
 
         if tab == 'feed':
             return base_qs.filter(
-                ~Q(reporter=user),
                 ~Q(status=Report.STATUS_DRAFT)
             ).order_by('-updated_at')
 

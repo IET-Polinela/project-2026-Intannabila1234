@@ -229,13 +229,6 @@ function updateSidebarStat(selector, value) {
   }
 }
 
-function resetReportForm() {
-  const form = document.getElementById('reportForm');
-  if (form) {
-    form.reset();
-  }
-}
-
 function closeReportModal() {
   const modalElement = document.getElementById('reportModal');
   if (modalElement && window.bootstrap && typeof window.bootstrap.Modal === 'function') {

@@ -25,8 +25,11 @@ def create_users_and_report(show_tokens=False):
     admin_password = 'AdminPass123'
 
     citizen_username = 'citizenlab10'
-    citizen_email = 'citizen_lab10@example.com'
+    citizen_email = 'citizen_lab10@gmail.com'
     citizen_password = 'CitizenPass123'
+
+    # Ensure the demo citizen account is unique and uses the same email as the SPA.
+    User.objects.filter(email=citizen_email).exclude(username=citizen_username).delete()
 
     admin, created = User.objects.get_or_create(username=admin_username, defaults={'email': admin_email, 'is_staff': True, 'is_superuser': True})
     if created:
@@ -34,9 +37,13 @@ def create_users_and_report(show_tokens=False):
         admin.save()
 
     citizen, created = User.objects.get_or_create(username=citizen_username, defaults={'email': citizen_email})
-    if created:
+    citizen.email = citizen_email
+    citizen.is_active = True
+    citizen.is_staff = False
+    citizen.is_superuser = False
+    if created or not citizen.has_usable_password():
         citizen.set_password(citizen_password)
-        citizen.save()
+    citizen.save()
 
     # Create a sample DRAFT report for citizen if none exists
     if not Report.objects.filter(reporter=citizen).exists():
