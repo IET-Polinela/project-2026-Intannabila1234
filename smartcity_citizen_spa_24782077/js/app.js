@@ -6,7 +6,7 @@ export let currentPage = 1;
 export let totalPages = 0;
 export let editingReportId = null;
 
-const API_BASE = 'http://127.0.0.1:8000';
+const API_BASE = 'http://103.151.63.87:8009';
 const REPORTS_ENDPOINT = `${API_BASE}/api/reports/`;
 const REPORT_DETAIL_ENDPOINT = `${API_BASE}/api/reports/`;
 const DEFAULT_PAGE_SIZE = 10;

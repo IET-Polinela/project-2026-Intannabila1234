@@ -77,7 +77,7 @@ export function setupLoginForm() {
     }
 
     try {
-      const data = await requestAPI('http://127.0.0.1:8000/api/token/', 'POST', {
+      const data = await requestAPI('http://103.151.63.87:8009/api/token/', 'POST', {
         email,
         password,
       });
