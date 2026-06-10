@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daftar Mahasiswa</title>
+</head>
+<body>
+    <h1>Daftar Mahasiswa</h1>
+    <ul>
+        {% for mhs in mahasiswa %}
+            <li>{{ mhs.nama }} - {{ mhs.npm }}</li>
+        {% empty %}
+            <li>Tidak ada data mahasiswa.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

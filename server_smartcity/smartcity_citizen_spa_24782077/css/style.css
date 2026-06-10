@@ -1,0 +1,164 @@
+html, body {
+  min-height: 100%;
+}
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: #0f172a;
+  background: radial-gradient(circle at top left, #d8edff 0%, #eef5ff 38%, #f8fbff 100%);
+}
+
+body.spa-bg {
+  background: radial-gradient(circle at top left, #d8edff 0%, #eef5ff 38%, #f8fbff 100%);
+}
+
+.navbar {
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+#app {
+  min-height: calc(100vh - 72px);
+}
+
+.login-shell {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.login-card {
+  max-width: 500px;
+  width: 100%;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.1);
+}
+
+.login-hero {
+  background: rgba(59, 130, 246, 0.08);
+  border-radius: 1rem;
+}
+
+.login-hero h1,
+.login-hero p {
+  margin: 0;
+}
+
+.login-title {
+  letter-spacing: 0.01em;
+}
+
+.form-control,
+.form-check-input {
+  border-radius: 0.95rem;
+}
+
+.input-group-text {
+  background: #ffffff;
+  border-right: 0;
+  border-radius: 0.95rem 0 0 0.95rem;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.18rem rgba(59, 130, 246, 0.18);
+}
+
+.btn-primary,
+.btn-outline-light,
+.btn-danger {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-outline-light:hover,
+.btn-danger:hover {
+  transform: translateY(-1px);
+}
+
+.profile-card {
+  border: none;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, #3b82f6, #0f172a);
+  color: #ffffff;
+}
+
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 1.2rem;
+  background: rgba(255, 255, 255, 0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+
+.stats-card {
+  border: none;
+  border-radius: 1.4rem;
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.08);
+}
+
+.stats-card .card-body {
+  padding: 1.8rem;
+}
+
+.stats-number {
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stats-tag {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-card {
+  border: none;
+  border-radius: 1.3rem;
+  box-shadow: 0 18px 30px rgba(15, 23, 42, 0.06);
+  background: rgba(255, 255, 255, 0.93);
+}
+
+.info-card .card-body {
+  padding: 1.75rem;
+}
+
+.profile-data dt,
+.profile-data dd {
+  margin-bottom: 0.65rem;
+}
+
+.profile-data dt {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.profile-data dd {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+@media (max-width: 575.98px) {
+  .login-shell {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .navbar-collapse {
+    background: rgba(15, 23, 42, 0.96);
+    margin-top: 0.5rem;
+    border-radius: 0.9rem;
+  }
+}
