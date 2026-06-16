@@ -1,171 +1,241 @@
-{% extends 'base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCity_Apuh - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #f8f9fa;
+            /* Gradasi Maron Premium Gelap */
+            background: radial-gradient(circle at top left, #4a1217 0%, #2d0b0e 38%, #1a0305 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar-maroon {
+            background: rgba(45, 11, 14, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-{% block title %}Dashboard - Laporan Publik{% endblock %}
+        .sidebar-maroon {
+            background: rgba(26, 3, 5, 0.9);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            min-height: calc(100vh - 72px);
+        }
 
-{% block content %}
-<div class="sc-apuh-page" style="min-height: 100vh; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-    <div class="sc-hero">
-        <div class="d-flex align-items-center gap-3">
-            <div class="p-3 rounded-3" style="background: rgba(255,77,77,0.12); border:1px solid rgba(255,77,77,0.22);">
-                <span style="font-size:22px;">🏙️</span>
-            </div>
-            <div>
-                <h1 class="display-4">Smart City Apuh</h1>
-                <p class="text-muted">Laporan Publik • Real-time insights</p>
-            </div>
-        </div>
-    </div>
+        .card-custom {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 1rem;
+            transition: transform 0.2s ease;
+        }
 
-    <!-- Statistik Cards -->
-    <div class="row mb-4" id="statistics-container">
-        <div class="col-md-3 mb-3">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <h5 class="card-title">📝 Total Laporan</h5>
-                    <h2 class="card-text">{{ total_reports }}</h2>
-                </div>
-            </div>
-        </div>
+        .card-custom:hover {
+            transform: translateY(-2px);
+            border-color: rgba(230, 57, 70, 0.4);
+        }
 
-        <div class="col-md-3 mb-3">
-            <div class="card bg-warning text-white">
-                <div class="card-body">
-                    <h5 class="card-title">🔔 Reported</h5>
-                    <h2 class="card-text">{{ total_reported }}</h2>
-                </div>
-            </div>
-        </div>
+        .nav-link-custom {
+            color: rgba(255, 255, 255, 0.75);
+            border-radius: 0.5rem;
+            margin-bottom: 0.25rem;
+            transition: all 0.2s;
+        }
 
-        <div class="col-md-3 mb-3">
-            <div class="card bg-info text-white">
-                <div class="card-body">
-                    <h5 class="card-title">⚙️ In Progress</h5>
-                    <h2 class="card-text">{{ total_in_progress }}</h2>
-                </div>
-            </div>
-        </div>
+        .nav-link-custom:hover, .nav-link-custom.active {
+            background: #6b1d24;
+            color: #fff;
+        }
 
-        <div class="col-md-3 mb-3">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h5 class="card-title">✅ Resolved</h5>
-                    <h2 class="card-text">{{ total_resolved }}</h2>
-                </div>
-            </div>
-        </div>
-    </div>
+        .table-dark-custom {
+            background: rgba(0, 0, 0, 0.2) !important;
+            color: #f8f9fa;
+        }
 
-    <!-- Charts Section -->
-    <div class="row mb-4">
-        <!-- Status Chart (Doughnut) -->
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">📈 Statistik Status Laporan</h5>
-                    <small class="text-muted">Distribusi laporan berdasarkan status</small>
-                </div>
-                <div class="card-body">
-                    <canvas id="statusChart" height="100"></canvas>
-                </div>
-            </div>
-        </div>
+        .text-maroon-light {
+            color: #ff8a95;
+        }
 
-        <!-- Category Chart (Bar) -->
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">📊 Statistik Kategori Laporan</h5>
-                    <small class="text-muted">Distribusi laporan berdasarkan kategori</small>
-                </div>
-                <div class="card-body">
-                    <canvas id="categoryChart" height="100"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
+        /* Live Search Results Floating Container */
+        #searchResults {
+            position: absolute;
+            width: 100%;
+            z-index: 1050;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
 
-    <!-- Live Search Section -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">🔍 Live Search Laporan</h5>
-                    <small class="text-muted">Cari laporan secara real-time tanpa reload</small>
-                </div>
-                <div class="card-body">
-                    <input 
-                        type="text" 
-                        id="searchInput" 
-                        class="form-control form-control-lg" 
-                        placeholder="Cari berdasarkan judul, lokasi, atau kategori..."
-                        autocomplete="off"
-                    >
-                    <div id="searchResults" class="mt-3"></div>
-                </div>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-maroon sticky-top py-3">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold text-uppercase tracking-wider" href="#">
+                <i class="fa-solid fa-city me-2 text-maroon-light"></i>SmartCity_Apuh
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item me-3">
+                        <span class="text-light small"><i class="fa-solid fa-user-shield me-1"></i> Admin</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-sm btn-outline-light rounded-pill px-3" href="/logout/">Logout</a>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- Latest Reports Section -->
-    <div class="row">
-        <!-- Latest Reported -->
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header bg-warning text-dark">
-                    <h5 class="mb-0">🔔 5 Laporan Terbaru (REPORTED)</h5>
-                </div>
-                <div class="card-body p-0">
-                    <div id="latestReportedList" class="list-group list-group-flush">
-                        <p class="text-muted text-center py-3">Loading...</p>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar-maroon p-3 collapse navbar-collapse" id="navbarNav">
+                <div class="position-sticky">
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-3 text-muted text-uppercase small">
+                        <span>Menu Utama</span>
+                    </h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom active p-3" href="#"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom p-3" href="#section-laporan"><i class="fa-solid fa-file-invoice me-2"></i> Report</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom p-3" href="#section-tabel-laporan"><i class="fa-solid fa-table-list me-2"></i> Tabel Laporan</a>
+                        </li>
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-3 text-muted text-uppercase small">
+                        <span>Hubungi Kami</span>
+                    </h6>
+                    <div class="card card-custom p-3 m-2 text-center">
+                        <div class="small fw-bold text-maroon-light mb-1">Contact Person</div>
+                        <div class="small"><i class="fa-solid fa-headset me-1 text-warning"></i> CS SmartCity</div>
+                        <a href="https://wa.me/628123456789" target="_blank" class="btn btn-sm btn-success w-100 mt-2 rounded-pill small">
+                            <i class="fa-brands fa-whatsapp me-1"></i> Hubungi WA
+                        </a>
                     </div>
                 </div>
-            </div>
-        </div>
+            </nav>
 
-        <!-- Latest Resolved -->
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">✅ 5 Laporan Terbaru (RESOLVED)</h5>
-                </div>
-                <div class="card-body p-0">
-                    <div id="latestResolvedList" class="list-group list-group-flush">
-                        <p class="text-muted text-center py-3">Loading...</p>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom border-secondary">
+                    <div>
+                        <h1 class="h2 fw-bold m-0">Selamat Datang di SmartCity_Apuh</h1>
+                        <p class="text-muted small mt-1">Sistem Pemantauan dan Pelaporan Masalah Kota Real-time Berbasis IoT.</p>
                     </div>
                 </div>
-            </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-8 position-relative">
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-dark border-secondary text-white"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <input type="text" id="searchInput" class="form-control bg-dark text-white border-secondary" placeholder="Cari laporan berdasarkan judul atau lokasi (Live Search)..." autocomplete="off">
+                        </div>
+                        <div id="searchResults" class="mt-1"></div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="card card-custom p-3">
+                            <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-chart-pie me-2"></i>Kategori Laporan</h5>
+                            <div class="chart-container" style="position: relative; height:240px;">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-custom p-3">
+                            <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-chart-column me-2"></i>Tabel Status Laporan</h5>
+                            <div class="chart-container" style="position: relative; height:240px;">
+                                <canvas id="statusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4" id="section-laporan">
+                    <div class="col-md-6">
+                        <div class="card card-custom p-3">
+                            <h5 class="card-title text-warning fw-bold mb-3"><i class="fa-solid fa-triangle-exclamation me-2"></i>Daftar Laporan Terbaru</h5>
+                            <div id="latestReportedList">
+                                </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-custom p-3">
+                            <h5 class="card-title text-success fw-bold mb-3"><i class="fa-solid fa-circle-check me-2"></i>Daftar Laporan Selesai</h5>
+                            <div id="latestResolvedList">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="section-tabel-laporan">
+                    <div class="col-12">
+                        <div class="card card-custom p-4">
+                            <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-table me-2"></i>Ringkasan Tabel Laporan Kategori</h5>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover table-dark-custom rounded border border-secondary text-white">
+                                    <thead>
+                                        <tr class="table-secondary text-dark">
+                                            <th>Nama Kategori</th>
+                                            <th class="text-center">Jumlah Kasus Terdata</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for stat in category_stats %}
+                                        <tr>
+                                            <td class="fw-bold text-info">{{ stat.category }}</td>
+                                            <td class="text-center badge bg-danger d-inline-block m-2 px-3">{{ stat.count }} Laporan</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="2" class="text-center text-muted">Belum ada statistik kategori masuk.</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
         </div>
     </div>
 
-</div>
-
-<!-- Modal untuk Detail Laporan -->
-<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailModalLabel">Detail Laporan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="modalContent">
-                    <p class="text-muted">Loading...</p>
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-dark text-white border-secondary">
+                <div class="modal-header border-secondary bg-maroon text-white">
+                    <h5 class="modal-title fw-bold" id="detailModalLabel">Detail Informasi Kasus</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-shadow="none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalContent">
+                    </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Tutup Detail</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-            </div>
         </div>
     </div>
-</div>
 
-{% endblock %}
-
-{% block extra_js %}
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-
-<!-- Dashboard Script -->
-<script src="{% static 'js/dashboard.js' %}"></script>
-{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+</body>
+</html>

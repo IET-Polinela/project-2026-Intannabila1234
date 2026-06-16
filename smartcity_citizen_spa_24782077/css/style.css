@@ -4,12 +4,12 @@ html, body {
 body {
   margin: 0;
   font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  color: #0f172a;
-  background: radial-gradient(circle at top left, #d8edff 0%, #eef5ff 38%, #f8fbff 100%);
+  color: #f8f9fa; /* Diubah ke putih agar teks terbaca jelas di latar gelap */
+  background: radial-gradient(circle at top left, #4a1217 0%, #2d0b0e 38%, #1a0305 100%);
 }
 
 body.spa-bg {
-  background: radial-gradient(circle at top left, #d8edff 0%, #eef5ff 38%, #f8fbff 100%);
+  background: radial-gradient(circle at top left, #4a1217 0%, #2d0b0e 38%, #1a0305 100%);
 }
 
 .navbar {

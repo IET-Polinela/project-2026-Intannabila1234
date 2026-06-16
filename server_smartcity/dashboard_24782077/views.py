@@ -1,5 +1,5 @@
 """
-Dashboard Views - Lab Session 7
+Dashboard Views - smartcity_apuh
 Menggunakan Class-Based View (TemplateView) dan JsonResponse
 """
 

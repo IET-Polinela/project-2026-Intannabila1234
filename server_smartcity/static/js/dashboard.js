@@ -12,7 +12,7 @@
 // CONFIGURATION - ENDPOINT SERVER PRODUKSI
 // ============================================================
 // Menggunakan alamat IP Publik dan Port Publik Server Backend milikmu
-const BASE_URL = "http://103.151.63.87:8009";
+const BASE_URL = "";
 
 // ============================================================
 // DEBOUNCE FUNCTION - Untuk Live Search
