@@ -21,7 +21,7 @@ class DashboardView(TemplateView):
     
     URL: /dashboard/
     """
-    template_name = 'dashboard/index.html'
+    template_name = 'dashboard.html'
     
     def get_context_data(self, **kwargs):
         """

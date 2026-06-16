@@ -1,0 +1,97 @@
+/* Smart City Apuh - Maroon Theme (Light/Dark) */
+
+:root {
+  --bg: #ffffff;
+  --surface: rgba(255, 255, 255, 0.85);
+  --text: #1f2937;
+  --muted: rgba(31, 41, 55, 0.7);
+
+  --maroon-900: #2a0606;
+  --maroon-800: #4a0f0f;
+  --maroon-700: #661414;
+  --maroon-600: #8a1a1a;
+  --maroon-500: #ff4d4d;
+  --maroon-300: #ff9f9f;
+
+  --card-border: rgba(138, 26, 26, 0.35);
+  --shadow: 0 12px 35px rgba(0,0,0,0.18);
+}
+
+html[data-theme="dark"] {
+  --bg: #0b0202;
+  --surface: rgba(15, 5, 5, 0.72);
+  --text: #ffd1d1;
+  --muted: rgba(255, 209, 209, 0.72);
+
+  --card-border: rgba(255, 77, 77, 0.25);
+  --shadow: 0 18px 45px rgba(0,0,0,0.45);
+}
+
+body {
+  background: radial-gradient(circle at top left, rgba(255, 77, 77, 0.14) 0%, var(--bg) 40%, var(--bg) 100%);
+  color: var(--text);
+}
+
+.sc-apuh-page {
+  background: linear-gradient(135deg, rgba(255,77,77,0.12), rgba(74,15,15,0.06));
+}
+
+.sc-hero {
+  border-bottom: 1px solid var(--maroon-800);
+  padding-bottom: 15px;
+  margin-bottom: 26px;
+}
+
+.sc-hero h1 {
+  color: var(--maroon-500);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.sc-hero p {
+  color: var(--muted);
+  margin: 6px 0 0 0;
+}
+
+.sc-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.sc-card-header {
+  background: rgba(74, 15, 15, 0.18);
+  border-bottom: 1px solid rgba(138, 26, 26, 0.2);
+}
+
+.sc-stat {
+  background: rgba(42, 6, 6, 0.65);
+  border: 1px solid rgba(102, 20, 20, 0.35);
+}
+
+html[data-theme="light"] .sc-stat {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.sc-badge {
+  border: 1px solid rgba(255, 77, 77, 0.25);
+  color: var(--maroon-500);
+  background: rgba(255, 77, 77, 0.10);
+}
+
+/* Toggle button */
+#themeToggle {
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #fff;
+  background: rgba(74, 15, 15, 0.35);
+}
+
+html[data-theme="light"] #themeToggle {
+  border-color: rgba(0,0,0,0.12);
+  color: var(--text);
+  background: rgba(255, 77, 77, 0.12);
+}
+

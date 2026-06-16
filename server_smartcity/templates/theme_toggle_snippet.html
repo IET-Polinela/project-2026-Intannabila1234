@@ -1,0 +1,17 @@
+{% load static %}
+<button id="themeToggle" type="button" class="btn btn-sm ms-2">
+  <i class="bi bi-moon-stars"></i>
+</button>
+<script>
+  (function(){
+    const btn = document.getElementById('themeToggle');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('sc-theme', next); } catch(e) {}
+    });
+  })();
+</script>
+

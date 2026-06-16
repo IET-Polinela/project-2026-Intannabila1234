@@ -1,5 +1,5 @@
 /**
- * Dashboard.js: Pemrograman Internet 1
+ * Dashboard.js - Lab Session 7: Pemrograman Internet 1
  * * Fitur:
  * 1. Chart.js untuk visualisasi data (Doughnut & Bar Chart)
  * 2. Fetch API untuk mengambil data dari backend (tanpa reload)
