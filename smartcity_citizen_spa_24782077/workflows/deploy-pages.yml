@@ -17,7 +17,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps: deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,7 +29,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.' # <--- INI BAGIAN YANG DI-SCREENSHOT UNTUK SS 4!
+          path: '.' # <--- AMBIL SCREENSHOT 4 DI BAGIAN SINI!
           
       - name: Deploy to GitHub Pages
         id: deployment

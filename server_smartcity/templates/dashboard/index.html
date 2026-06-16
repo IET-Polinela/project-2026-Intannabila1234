@@ -1,220 +1,87 @@
-{% extends 'Base.html' %}
-{% load static %}
-
-{% block content %}
-<!-- CDN Chart.js untuk membuat grafik otomatis -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<div style="background-color: #0b0202; color: #f5e6e6; min-height: 100vh; padding: 30px; font-family: 'Plus Jakarta Sans', sans-serif;">
-    
-    <!-- HEADER DASHBOARD & TOMBOL TAMBAH LAPORAN -->
-    <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4" style="border-color: #2d0b0b !important;">
-        <div>
-            <h1 style="color: #ff4d4d; font-weight: 700; margin: 0;">Dashboard Analytics</h1>
-            <p style="color: #8c7373; margin: 5px 0 0 0;">Semua fitur berjalan di satu halaman tanpa pindah halaman.</p>
-        </div>
-        <!-- Tombol Tambah Laporan memicu Modal Bootstrap -->
-        <button class="btn" data-bs-toggle="modal" data-bs-target="#addReportModal" style="background-color: #b32424; color: white; font-weight: 600; padding: 10px 20px; border-radius: 6px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle me-2" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/></svg>
-            Buat Laporan Baru
-        </button>
-    </div>
-
-    <!-- 4 CARDS KINERJA UTAMA -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <div style="background-color: #140707; border: 1px solid #3d1414; padding: 20px; border-radius: 10px;">
-                <span style="color: #8c7373; font-size: 12px; font-weight: 700;">TOTAL LAPORAN</span>
-                <h2 style="font-size: 32px; margin-top: 5px; color: #fff;">{{ total_reports|default:"4" }}</h2>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div style="background-color: #140707; border: 1px solid #3d1414; padding: 20px; border-radius: 10px;">
-                <span style="color: #ffc107; font-size: 12px; font-weight: 700;">REPORTED</span>
-                <h2 style="font-size: 32px; margin-top: 5px; color: #fff;">{{ reported_count|default:"2" }}</h2>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div style="background-color: #140707; border: 1px solid #3d1414; padding: 20px; border-radius: 10px;">
-                <span style="color: #0dcaf0; font-size: 12px; font-weight: 700;">VERIFIED</span>
-                <h2 style="font-size: 32px; margin-top: 5px; color: #fff;">0</h2>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div style="background-color: #140707; border: 1px solid #3d1414; padding: 20px; border-radius: 10px;">
-                <span style="color: #198754; font-size: 12px; font-weight: 700;">RESOLVED</span>
-                <h2 style="font-size: 32px; margin-top: 5px; color: #fff;">0</h2>
-            </div>
-        </div>
-    </div>
-
-    <!-- GRAFIK STATISTIK INTERAKTIF -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-6">
-            <div style="background-color: #140707; border: 1px solid #2d0b0b; padding: 20px; border-radius: 12px;">
-                <h5 style="color: #ff4d4d; margin-bottom: 15px;">Status Laporan Real-time</h5>
-                <div style="height: 250px; position: relative;"><canvas id="statusChart"></canvas></div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div style="background-color: #140707; border: 1px solid #2d0b0b; padding: 20px; border-radius: 12px;">
-                <h5 style="color: #ff4d4d; margin-bottom: 15px;">Kategori Tren Laporan</h5>
-                <div style="height: 250px; position: relative;"><canvas id="kategoriChart"></canvas></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- TABEL DAFTAR LAPORAN -->
-    <div style="background-color: #140707; border: 1px solid #2d0b0b; padding: 25px; border-radius: 12px; margin-bottom: 40px;">
-        <h5 style="color: #ff4d4d; margin-bottom: 20px;">Daftar Laporan Masuk</h5>
-        <div class="table-responsive">
-            <table class="table table-dark table-hover" style="--bs-table-bg: #140707; --bs-table-border-color: #2d0b0b;">
-                <thead>
-                    <tr style="color: #ff6666;">
-                        <th>ID</th>
-                        <th>Judul Laporan</th>
-                        <th>Kategori</th>
-                        <th>Tanggal</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>#01</td>
-                        <td>Jalan Rusak Depan Polinela</td>
-                        <td>Infrastruktur</td>
-                        <td>16 Juni 2026</td>
-                        <td><span class="badge bg-warning text-dark">Reported</span></td>
-                    </tr>
-                    <tr>
-                        <td>#02</td>
-                        <td>Lampu Merah Padam</td>
-                        <td>Fasilitas Publik</td>
-                        <td>15 Juni 2026</td>
-                        <td><span class="badge bg-info">Verified</span></td>
-                    </tr>
-                    <tr>
-                        <td>#03</td>
-                        <td>Penumpukan Sampah Pasar</td>
-                        <td>Kebersihan</td>
-                        <td>14 Juni 2026</td>
-                        <td><span class="badge bg-success">Resolved</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- INFO KONTAK FOOTER -->
-    <footer class="text-center pt-4 border-top" style="border-color: #2d0b0b !important; color: #8c7373;">
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <h6>Hubungi Layanan</h6>
-                <p class="small mb-0">Email: support@smartcity.id<br>Telp: (021) 1234567</p>
-            </div>
-            <div class="col-md-4 mb-3">
-                <h6>Alamat Kantor</h6>
-                <p class="small mb-0">Gedung Pusat Teknologi Smart City<br>Jl. Soekarno Hatta No. 10</p>
-            </div>
-            <div class="col-md-4 mb-3">
-                <h6>Ikuti Kami</h6>
-                <p class="small mb-0">Instagram: @SmartCity.Apuh<br>Twitter: @SmartCityApuh</p>
-            </div>
-        </div>
-        <p class="small mt-3 mb-0">&copy; 2026 Smart City Apuh. All Rights Reserved.</p>
-    </footer>
-
-</div>
-
-<!-- MODAL POP-UP UNTUK TAMBAH LAPORAN -->
-<div class="modal fade" id="addReportModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="background-color: #1a0505; border: 1px solid #ff4d4d; color: #f5e6e6;">
-            <div class="modal-header" style="border-bottom: 1px solid #3d1414;">
-                <h5 class="modal-title" style="color: #ff4d4d;">Form Tambah Laporan Baru</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-toggle="modal" data-bs-target="#addReportModal"></button>
-            </div>
-            <form method="POST" action="">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Judul Laporan</label>
-                        <input type="text" class="form-control" name="title" required style="background-color: #0b0202; border: 1px solid #3d1414; color: #fff;">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kategori</label>
-                        <select class="form-select" name="category" style="background-color: #0b0202; border: 1px solid #3d1414; color: #fff;">
-                            <option>Infrastruktur</option>
-                            <option>Fasilitas Publik</option>
-                            <option>Kebersihan</option>
-                            <option>Keamanan</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Isi Detail Laporan</label>
-                        <textarea class="form-control" name="description" rows="4" required style="background-color: #0b0202; border: 1px solid #3d1414; color: #fff;"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer" style="border-top: 1px solid #3d1414;">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn" style="background-color: #b32424; color: #fff;">Kirim Laporan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- LOGIKA PEMBUATAN GRAFIK CHART.JS -->
-<script>
-    // 1. Grafik Batang Status Laporan
-    const ctxStatus = document.getElementById('statusChart').getContext('2d');
-    new Chart(ctxStatus, {
-        type: 'bar',
-        data: {
-            labels: ['Reported', 'Verified', 'Resolved'],
-            datasets: [{
-                label: 'Jumlah',
-                data: [4, 2, 1],
-                backgroundColor: ['#ffc107', '#0dcaf0', '#198754'],
-                borderWidth: 0,
-                borderRadius: 5
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: { grid: { color: '#2d0b0b' }, ticks: { color: '#8c7373' } },
-                x: { ticks: { color: '#8c7373' } }
-            }
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCity_Apuh - Citizen Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: radial-gradient(circle at top left, #4a1217 0%, #2d0b0e 38%, #1a0305 100%);
+            color: #f8f9fa;
+            min-height: 100vh;
         }
-    });
-
-    // 2. Grafik Line Tren Kategori
-    const ctxKategori = document.getElementById('kategoriChart').getContext('2d');
-    new Chart(ctxKategori, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
-            datasets: [{
-                label: 'Laporan Masuk',
-                data: [12, 19, 3, 5, 2, 8],
-                borderColor: '#ff4d4d',
-                backgroundColor: 'rgba(255, 77, 77, 0.1)',
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: '#8c7373' } } },
-            scales: {
-                y: { grid: { color: '#2d0b0b' }, ticks: { color: '#8c7373' } },
-                x: { grid: { color: '#2d0b0b' }, ticks: { color: '#8c7373' } }
-            }
+        .card-custom {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 1rem;
         }
-    });
-</script>
-{% endblock %}
+        .text-maroon-light {
+            color: #ff8a95;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark border-bottom border-secondary shadow-sm">
+        <div class="container">
+            <span class="navbar-brand fw-bold text-uppercase"><i class="fa-solid fa-city text-maroon-light me-2"></i>SmartCity_Apuh</span>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="p-5 mb-4 card-custom text-center">
+            <h1 class="display-5 fw-bold text-maroon-light">Selamat Datang di SmartCity_Apuh</h1>
+            <p class="col-md-8 mx-auto fs-5 text-muted">Portal Pengaduan Warga dan Pemantauan Layanan Masyarakat Kota secara Real-Time.</p>
+            <div class="mt-4">
+                <a href="http://103.151.63.87:8009/dashboard/" target="_blank" class="btn btn-outline-light btn-lg px-4 rounded-pill">
+                    <i class="fa-solid fa-chart-pie me-2"></i>Buka Dashboard Utama
+                </a>
+            </div>
+        </div>
+
+        <div class="card card-custom p-4 mt-4">
+            <h4 class="fw-bold mb-3 text-maroon-light"><i class="fa-solid fa-rss me-2"></i>Live Feed Laporan Warga</h4>
+            <div id="loadingStatus" class="text-info small"><i class="fa-solid fa-spinner fa-spin me-1"></i> Menghubungi backend server kampus...</div>
+            <ul id="reportFeedList" class="list-group list-group-flush bg-transparent mt-2">
+                </ul>
+        </div>
+    </div>
+
+    <script>
+        // Mengambil data dari Endpoint API Backend Django di VPS Kampus
+        // Sesuaikan IP dan Port 80XX milikmu
+        const BACKEND_URL = 'http://103.151.63.87:8009/dashboard/api/reports/'; 
+
+        fetch(BACKEND_URL)
+            .then(response => response.json())
+            .then(data => {
+                const statusEl = document.getElementById('loadingStatus');
+                statusEl.style.display = 'none';
+                
+                const listContainer = document.getElementById('reportFeedList');
+                if(data.length === 0) {
+                    listContainer.innerHTML = '<li class="list-group-item bg-transparent text-muted text-center border-0">Belum ada data laporan masuk di database PostgreSQL.</li>';
+                    return;
+                }
+                
+                data.slice(0, 5).forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item bg-transparent text-white border-secondary px-0 d-flex justify-content-between align-items-center';
+                    li.innerHTML = `
+                        <div>
+                            <strong class="text-warning">${item.title}</strong> - <span class="text-muted small">${item.location}</span>
+                        </div>
+                        <span class="badge bg-danger rounded-pill">${item.category}</span>
+                    `;
+                    listContainer.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('loadingStatus').innerHTML = '<span class="text-danger"><i class="fa-solid fa-circle-xmark me-1"></i> Gagal memuat data dari backend server kampus. Pastikan Gunicorn aktif dan CORS sudah diatur.</span>';
+            });
+    </script>
+</body>
+</html>
