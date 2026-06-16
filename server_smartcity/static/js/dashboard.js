@@ -1,7 +1,6 @@
 /**
- * Dashboard.js - Lab Session 7: Pemrograman Internet 1
- * 
- * Fitur:
+ * Dashboard.js: Pemrograman Internet 1
+ * * Fitur:
  * 1. Chart.js untuk visualisasi data (Doughnut & Bar Chart)
  * 2. Fetch API untuk mengambil data dari backend (tanpa reload)
  * 3. Live Search dengan Debouncing
@@ -10,16 +9,14 @@
  */
 
 // ============================================================
+// CONFIGURATION - ENDPOINT SERVER PRODUKSI
+// ============================================================
+// Menggunakan alamat IP Publik dan Port Publik Server Backend milikmu
+const BASE_URL = "http://103.151.63.87:8009";
+
+// ============================================================
 // DEBOUNCE FUNCTION - Untuk Live Search
 // ============================================================
-/**
- * Fungsi debounce untuk mengurangi frequency pemanggilan API
- * saat user mengetik di search input.
- * 
- * @param {Function} func - Fungsi yang akan dijalankan
- * @param {Number} delay - Delay dalam milliseconds
- * @returns {Function} - Function debounced
- */
 function debounce(func, delay) {
     let timeoutId;
     return function (...args) {
@@ -28,16 +25,14 @@ function debounce(func, delay) {
     };
 }
 
-
 // ============================================================
 // CHART INSTANCES - Global variable untuk menyimpan chart
 // ============================================================
 let statusChart = null;
 let categoryChart = null;
 
-
 // ============================================================
-// FETCH DATA FUNCTIONS
+// FETCH DATA FUNCTIONS (Sudah Diperbarui Menggunakan BASE_URL)
 // ============================================================
 
 /**
@@ -46,7 +41,7 @@ let categoryChart = null;
  */
 async function fetchStatusStatistics() {
     try {
-        const response = await fetch('/main_app/api/status-statistics/');
+        const response = await fetch(`${BASE_URL}/main_app/api/status-statistics/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -57,14 +52,13 @@ async function fetchStatusStatistics() {
     }
 }
 
-
 /**
  * Mengambil data statistik kategori dari API
  * @returns {Promise<Object>} - Data statistik kategori
  */
 async function fetchCategoryStatistics() {
     try {
-        const response = await fetch('/main_app/api/category-statistics/');
+        const response = await fetch(`${BASE_URL}/main_app/api/category-statistics/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -75,14 +69,13 @@ async function fetchCategoryStatistics() {
     }
 }
 
-
 /**
  * Mengambil 5 laporan terbaru dengan status REPORTED
  * @returns {Promise<Array>} - Array laporan terbaru
  */
 async function fetchLatestReported() {
     try {
-        const response = await fetch('/main_app/api/latest-reported/');
+        const response = await fetch(`${BASE_URL}/main_app/api/latest-reported/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -93,14 +86,13 @@ async function fetchLatestReported() {
     }
 }
 
-
 /**
  * Mengambil 5 laporan terbaru dengan status RESOLVED
  * @returns {Promise<Array>} - Array laporan terbaru
  */
 async function fetchLatestResolved() {
     try {
-        const response = await fetch('/main_app/api/latest-resolved/');
+        const response = await fetch(`${BASE_URL}/main_app/api/latest-resolved/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -111,7 +103,6 @@ async function fetchLatestResolved() {
     }
 }
 
-
 /**
  * Mencari laporan berdasarkan query
  * @param {String} query - String pencarian
@@ -119,7 +110,7 @@ async function fetchLatestResolved() {
  */
 async function searchReports(query) {
     try {
-        const response = await fetch(`/main_app/api/search/?q=${encodeURIComponent(query)}`);
+        const response = await fetch(`${BASE_URL}/main_app/api/search/?q=${encodeURIComponent(query)}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -130,7 +121,6 @@ async function searchReports(query) {
     }
 }
 
-
 /**
  * Mengambil detail laporan berdasarkan ID
  * @param {Number} reportId - ID laporan
@@ -138,7 +128,7 @@ async function searchReports(query) {
  */
 async function fetchReportDetail(reportId) {
     try {
-        const response = await fetch(`/main_app/api/detail/${reportId}/`);
+        const response = await fetch(`${BASE_URL}/main_app/api/detail/${reportId}/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -149,15 +139,9 @@ async function fetchReportDetail(reportId) {
     }
 }
 
-
 // ============================================================
 // CHART RENDERING FUNCTIONS
 // ============================================================
-
-/**
- * Render Doughnut Chart untuk Status Laporan
- * Menggunakan Chart.js library
- */
 async function renderStatusChart() {
     const data = await fetchStatusStatistics();
     
@@ -169,25 +153,21 @@ async function renderStatusChart() {
     const ctx = document.getElementById('statusChart');
     if (!ctx) return;
 
-    // Destroy existing chart jika ada
     if (statusChart) {
         statusChart.destroy();
     }
 
-    // Define warna untuk setiap status
     const colors = {
-        'REPORTED': '#FFC107',    // Kuning
-        'VERIFIED': '#17A2B8',    // Cyan
-        'IN_PROGRESS': '#007BFF', // Biru
-        'RESOLVED': '#28A745',    // Hijau
+        'REPORTED': '#FFC107',
+        'VERIFIED': '#17A2B8',
+        'IN_PROGRESS': '#007BFF',
+        'RESOLVED': '#28A745',
     };
 
-    // Siapkan labels dan datasets
     const labels = Object.keys(data);
     const values = Object.values(data);
     const backgroundColor = labels.map(label => colors[label] || '#6C757D');
 
-    // Render Doughnut Chart
     statusChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -206,9 +186,7 @@ async function renderStatusChart() {
                 legend: {
                     position: 'bottom',
                     labels: {
-                        font: {
-                            size: 14,
-                        },
+                        font: { size: 14 },
                         padding: 15,
                     }
                 },
@@ -228,11 +206,6 @@ async function renderStatusChart() {
     });
 }
 
-
-/**
- * Render Bar Chart untuk Kategori Laporan
- * Menggunakan Chart.js library
- */
 async function renderCategoryChart() {
     const data = await fetchCategoryStatistics();
     
@@ -244,16 +217,13 @@ async function renderCategoryChart() {
     const ctx = document.getElementById('categoryChart');
     if (!ctx) return;
 
-    // Destroy existing chart jika ada
     if (categoryChart) {
         categoryChart.destroy();
     }
 
-    // Siapkan labels dan datasets
     const labels = Object.keys(data);
     const values = Object.values(data);
 
-    // Render Bar Chart
     categoryChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -261,22 +231,8 @@ async function renderCategoryChart() {
             datasets: [{
                 label: 'Jumlah Laporan',
                 data: values,
-                backgroundColor: [
-                    '#FF6384',
-                    '#36A2EB',
-                    '#FFCE56',
-                    '#4BC0C0',
-                    '#9966FF',
-                    '#FF9F40',
-                ],
-                borderColor: [
-                    '#FF6384',
-                    '#36A2EB',
-                    '#FFCE56',
-                    '#4BC0C0',
-                    '#9966FF',
-                    '#FF9F40',
-                ],
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+                borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
                 borderWidth: 1,
             }]
         },
@@ -285,31 +241,21 @@ async function renderCategoryChart() {
             responsive: true,
             maintainAspectRatio: true,
             plugins: {
-                legend: {
-                    display: false,
-                }
+                legend: { display: false }
             },
             scales: {
                 x: {
                     beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
-                    }
+                    ticks: { stepSize: 1 }
                 }
             }
         }
     });
 }
 
-
 // ============================================================
 // RENDER LIST FUNCTIONS
 // ============================================================
-
-/**
- * Render list laporan berdasarkan array
- * Menampilkan laporan dalam bentuk list group
- */
 function renderReportList(reports, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -321,7 +267,6 @@ function renderReportList(reports, containerId) {
 
     let html = '';
     reports.forEach(report => {
-        // Badge status dengan warna berbeda
         let statusBadge = '';
         if (report.status === 'REPORTED') {
             statusBadge = '<span class="badge bg-warning">REPORTED</span>';
@@ -358,11 +303,6 @@ function renderReportList(reports, containerId) {
     container.innerHTML = html;
 }
 
-
-/**
- * Render search results
- * Menampilkan hasil pencarian di search results container
- */
 function renderSearchResults(reports) {
     const container = document.getElementById('searchResults');
     if (!container) return;
@@ -374,7 +314,6 @@ function renderSearchResults(reports) {
 
     let html = '<div class="list-group">';
     reports.forEach(report => {
-        // Badge status dengan warna berbeda
         let statusBadge = '';
         if (report.status === 'REPORTED') {
             statusBadge = '<span class="badge bg-warning">REPORTED</span>';
@@ -411,15 +350,9 @@ function renderSearchResults(reports) {
     container.innerHTML = html;
 }
 
-
 // ============================================================
 // MODAL FUNCTIONS
 // ============================================================
-
-/**
- * Menampilkan detail laporan di modal
- * Menggunakan Bootstrap Modal
- */
 async function showDetailModal(reportId) {
     const report = await fetchReportDetail(reportId);
     
@@ -428,7 +361,6 @@ async function showDetailModal(reportId) {
         return;
     }
 
-    // Tentukan badge status
     let statusBadge = '';
     if (report.status === 'REPORTED') {
         statusBadge = '<span class="badge bg-warning">REPORTED</span>';
@@ -440,7 +372,6 @@ async function showDetailModal(reportId) {
         statusBadge = '<span class="badge bg-success">RESOLVED</span>';
     }
 
-    // Update modal content
     const modalContent = document.getElementById('modalContent');
     modalContent.innerHTML = `
         <div class="container-fluid">
@@ -475,23 +406,15 @@ async function showDetailModal(reportId) {
         </div>
     `;
 
-    // Update modal title
     document.getElementById('detailModalLabel').textContent = `Detail Laporan #${report.id}`;
 
-    // Tampilkan modal menggunakan Bootstrap 5
     const modal = new bootstrap.Modal(document.getElementById('detailModal'));
     modal.show();
 }
 
-
 // ============================================================
-// EVENT LISTENERS
+// EVENT LISTENERS & INITIALIZATION
 // ============================================================
-
-/**
- * Event listener untuk Live Search
- * Menggunakan Debouncing untuk mengurangi API calls
- */
 const debouncedSearch = debounce(async function (query) {
     const searchResults = document.getElementById('searchResults');
     
@@ -502,34 +425,20 @@ const debouncedSearch = debounce(async function (query) {
 
     const results = await searchReports(query);
     renderSearchResults(results);
-}, 300); // Delay 300ms
+}, 300);
 
-
-// ============================================================
-// INITIALIZATION - DOMContentLoaded
-// ============================================================
-
-/**
- * Inisialisasi dashboard saat DOM siap
- * - Load charts
- * - Load latest reports
- * - Setup event listeners
- */
 document.addEventListener('DOMContentLoaded', async function () {
-    console.log('Dashboard initialized');
+    console.log('Dashboard initialized securely with Production Endpoint');
 
-    // 1. Render Charts
     await renderStatusChart();
     await renderCategoryChart();
 
-    // 2. Load Latest Reports
     const latestReported = await fetchLatestReported();
     const latestResolved = await fetchLatestResolved();
     
     renderReportList(latestReported, 'latestReportedList');
     renderReportList(latestResolved, 'latestResolvedList');
 
-    // 3. Setup Search Input Event Listener
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('input', function (e) {
@@ -537,7 +446,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             debouncedSearch(query);
         });
 
-        // Clear search results saat input dikosongkan
         searchInput.addEventListener('focus', function () {
             if (this.value.trim() === '') {
                 document.getElementById('searchResults').innerHTML = '';
@@ -547,14 +455,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         searchInput.addEventListener('blur', function () {
             setTimeout(() => {
                 document.getElementById('searchResults').innerHTML = '';
-            }, 200);
+            } , 200);
         });
     }
 
-    // 4. Event Delegation untuk Detail Button
-    // Menggunakan event delegation untuk handle click event pada dinamis button
     document.addEventListener('click', function (e) {
-        // Cek apakah element yang diklik adalah detail-btn
         if (e.target.classList.contains('detail-btn')) {
             e.preventDefault();
             const reportId = e.target.getAttribute('data-report-id');
@@ -563,10 +468,4 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
     });
-
-    // 5. Refresh Charts setiap 30 detik (optional)
-    // setInterval(async () => {
-    //     await renderStatusChart();
-    //     await renderCategoryChart();
-    // }, 30000);
 });

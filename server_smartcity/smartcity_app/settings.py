@@ -11,7 +11,7 @@ SECRET_KEY = 'django-insecure-((em28vx0#y9zqv#0#_&^e5lv1z28e!_9(va5oh3n=uz2!31ny
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
+ALLOWED_HOSTS = ['*']
 
 # ---------------------------------------------------------------------------
 # Applications
@@ -55,8 +55,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-ROOT_URLCONF = 'npm24782077_iet_2026.urls'
+ROOT_URLCONF = 'smartcity_app.urls'
 
 # ---------------------------------------------------------------------------
 # Templates
@@ -77,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'npm24782077_iet_2026.wsgi.application'
+WSGI_APPLICATION = 'smartcity_app.wsgi.application'
 
 # ---------------------------------------------------------------------------
 # Database
@@ -138,7 +137,7 @@ LOGOUT_REDIRECT_URL = '/'
 # ---------------------------------------------------------------------------
 # CSRF / Session (development only)
 # ---------------------------------------------------------------------------
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
+CSRF_TRUSTED_ORIGINS = ['http://103.151.63.87:8009']
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
 
@@ -168,3 +167,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True
+STATIC_ROOT = BASE_DIR / 'staticfiles'
