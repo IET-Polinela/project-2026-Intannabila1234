@@ -49,6 +49,18 @@ class DashboardView(TemplateView):
             .order_by('-count')
         )
         
+        # Data untuk daftar laporan pada template dashboard
+        latest_reports = (
+            Report.objects
+            .filter(status='REPORTED')
+            .order_by('-created_at')[:5]
+        )
+        resolved_reports = (
+            Report.objects
+            .filter(status='RESOLVED')
+            .order_by('-updated_at')[:5]
+        )
+        
         # Masukkan ke context
         context['total_reports'] = total_reports
         context['reported_count'] = reported_count
@@ -56,6 +68,8 @@ class DashboardView(TemplateView):
         context['in_progress_count'] = in_progress_count
         context['resolved_count'] = resolved_count
         context['category_stats'] = list(category_stats)
+        context['latest_reports'] = latest_reports
+        context['resolved_reports'] = resolved_reports
         
         return context
 

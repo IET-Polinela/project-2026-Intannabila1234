@@ -8,255 +8,498 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+
     <style>
+        :root {
+            --bg-1: #3b0d12;
+            --bg-2: #1f0507;
+            --surface: rgba(255, 255, 255, 0.06);
+            --surface-2: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f7eef0;
+            --muted: #c7a5aa;
+            --primary: #b8404e;
+            --primary-2: #f0a1a8;
+            --success: #26a96c;
+            --warning: #f5b942;
+            --shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #f8f9fa;
-            /* Gradasi Maron Premium Gelap */
-            background: radial-gradient(circle at top left, #4a1217 0%, #2d0b0e 38%, #1a0305 100%);
-            min-height: 100vh;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top, rgba(170, 52, 66, 0.15), transparent 22%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            overflow-x: hidden;
         }
-        
+
+        .splash-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(circle at center, rgba(55, 12, 17, 0.95), rgba(15, 3, 5, 0.98));
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .globe-wrap {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: zoomPulse 2.6s ease-in-out infinite;
+        }
+
+        .globe {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 30% 30%, #f7b4b9 0%, #b8404e 35%, #5a1118 70%, #180507 100%);
+            box-shadow:
+                inset -18px -18px 40px rgba(0, 0, 0, 0.5),
+                inset 12px 12px 20px rgba(255, 255, 255, 0.08),
+                0 0 40px rgba(184, 64, 78, 0.28);
+            animation: globeSpin 3.5s linear infinite;
+            overflow: hidden;
+        }
+
+        .globe::before,
+        .globe::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            opacity: 0.7;
+        }
+
+        .globe::before {
+            width: 100%;
+            height: 12px;
+            top: 48%;
+            left: 0;
+            transform: rotate(22deg);
+        }
+
+        .globe::after {
+            width: 72%;
+            height: 72%;
+            left: 14%;
+            top: 14%;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .globe-ring {
+            position: absolute;
+            width: 230px;
+            height: 230px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transform: perspective(600px) rotateX(68deg);
+            animation: ringPulse 3s ease-in-out infinite;
+        }
+
+        .dashboard-shell {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .dashboard-shell.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .navbar-maroon {
-            background: rgba(45, 11, 14, 0.85);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(90deg, rgba(37, 8, 11, 0.94), rgba(78, 18, 24, 0.94));
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
         }
 
         .sidebar-maroon {
-            background: rgba(26, 3, 5, 0.9);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            background: linear-gradient(180deg, rgba(18, 5, 7, 0.96), rgba(37, 9, 12, 0.96));
+            border-right: 1px solid var(--border);
             min-height: calc(100vh - 72px);
         }
 
+        .sidebar-link {
+            color: rgba(255, 255, 255, 0.78);
+            border-radius: 0.8rem;
+            margin-bottom: 0.35rem;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: linear-gradient(90deg, rgba(184, 64, 78, 0.9), rgba(109, 24, 33, 0.9));
+            color: #fff;
+        }
+
         .card-custom {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(14px);
             border-radius: 1rem;
-            transition: transform 0.2s ease;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, border-color 0.2s ease;
         }
 
         .card-custom:hover {
             transform: translateY(-2px);
-            border-color: rgba(230, 57, 70, 0.4);
-        }
-
-        .nav-link-custom {
-            color: rgba(255, 255, 255, 0.75);
-            border-radius: 0.5rem;
-            margin-bottom: 0.25rem;
-            transition: all 0.2s;
-        }
-
-        .nav-link-custom:hover, .nav-link-custom.active {
-            background: #6b1d24;
-            color: #fff;
-        }
-
-        .table-dark-custom {
-            background: rgba(0, 0, 0, 0.2) !important;
-            color: #f8f9fa;
+            border-color: rgba(240, 161, 168, 0.45);
         }
 
         .text-maroon-light {
-            color: #ff8a95;
+            color: var(--primary-2);
         }
 
-        /* Live Search Results Floating Container */
+        .stat-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            min-height: 120px;
+        }
+
+        .report-item {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+            border: 1px solid var(--border);
+            border-radius: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .report-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .opening-panel {
+            background:
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+                radial-gradient(circle at top right, rgba(184, 64, 78, 0.22), transparent 18%);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .typing-text::after {
+            content: '|';
+            display: inline-block;
+            color: var(--primary-2);
+            animation: blink 0.8s infinite;
+        }
+
         #searchResults {
             position: absolute;
             width: 100%;
             z-index: 1050;
-            max-height: 300px;
+            max-height: 320px;
             overflow-y: auto;
         }
-        
-        /* Tambahan penyesuaian kecil agar list item laporan terlihat konsisten */
-        .report-item {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 0.75rem;
-            transition: all 0.2s;
+
+        @keyframes globeSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
-        .report-item:hover {
-            background: rgba(255, 255, 255, 0.08);
+
+        @keyframes ringPulse {
+            0%, 100% { transform: perspective(600px) rotateX(68deg) scale(0.96); opacity: 0.4; }
+            50% { transform: perspective(600px) rotateX(68deg) scale(1.04); opacity: 0.85; }
+        }
+
+        @keyframes zoomPulse {
+            0%, 100% { transform: scale(0.98); }
+            50% { transform: scale(1.03); }
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0; }
         }
     </style>
 </head>
 <body>
-
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-maroon sticky-top py-3">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand fw-bold text-uppercase tracking-wider" href="#">
-                <i class="fa-solid fa-city me-2 text-maroon-light"></i>SmartCity_Apuh
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav align-items-center">
-                    <li class="nav-item me-3">
-                        <span class="text-light small"><i class="fa-solid fa-user-shield me-1"></i> Welcome, {{ user.username }}</span>
-                    </li>
-                    <li class="nav-item">
-                        <form action="{% url 'logout' %}" method="post" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-outline-light rounded-pill px-3">Logout</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
+    <div class="splash-screen" id="splashScreen">
+        <div class="globe-wrap">
+            <div class="globe-ring"></div>
+            <div class="globe"></div>
         </div>
-    </nav>
+    </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar-maroon p-3 collapse navbar-collapse" id="navbarNav">
-                <div class="position-sticky">
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-3 text-muted text-uppercase small">
-                        <span>Menu Utama</span>
-                    </h6>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link nav-link-custom active p-3" href="#"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-link-custom p-3" href="#section-laporan"><i class="fa-solid fa-file-invoice me-2"></i> Report</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-link-custom p-3" href="#section-tabel-laporan"><i class="fa-solid fa-table-list me-2"></i> Tabel Laporan</a>
-                        </li>
+    <div class="dashboard-shell" id="dashboardShell">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-maroon sticky-top py-3">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand fw-bold text-uppercase tracking-wider" href="#">
+                    <i class="fa-solid fa-city me-2 text-maroon-light"></i>SmartCity_Apuh
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="topNavbar">
+                    <ul class="navbar-nav align-items-center gap-2">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item me-2">
+                                <span class="text-light small"><i class="fa-solid fa-user-shield me-1"></i> Welcome, {{ user.username }}</span>
+                            </li>
+                            <li class="nav-item">
+                                <form action="{% url 'logout' %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-light rounded-pill px-3">Logout</button>
+                                </form>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="btn btn-sm btn-outline-light rounded-pill px-3" href="{% url 'login' %}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-sm btn-light text-dark rounded-pill px-3" href="{% url 'register' %}">Register</a>
+                            </li>
+                        {% endif %}
                     </ul>
-
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-3 text-muted text-uppercase small">
-                        <span>Hubungi Kami</span>
-                    </h6>
-                    <div class="card card-custom p-3 m-2 text-center">
-                        <div class="small fw-bold text-maroon-light mb-1">Contact Person</div>
-                        <div class="small"><i class="fa-solid fa-headset me-1 text-warning"></i> CS SmartCity</div>
-                        <a href="https://wa.me/628123456789" target="_blank" class="btn btn-sm btn-success w-100 mt-2 rounded-pill small">
-                            <i class="fa-brands fa-whatsapp me-1"></i> Hubungi WA
-                        </a>
-                    </div>
                 </div>
-            </nav>
+            </div>
+        </nav>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-                
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom border-secondary">
-                    <div>
-                        <h1 class="h2 fw-bold m-0">Selamat Datang di SmartCity_Apuh</h1>
-                        <p class="text-muted small mt-1">Sistem Pemantauan dan Pelaporan Masalah Kota Real-time Berbasis IoT.</p>
-                    </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-md-8 position-relative">
-                        <div class="input-group shadow-sm">
-                            <span class="input-group-text bg-dark border-secondary text-white"><i class="fa-solid fa-magnifying-glass"></i></span>
-                            <input type="text" id="searchInput" class="form-control bg-dark text-white border-secondary" placeholder="Cari laporan berdasarkan judul atau lokasi (Live Search)..." autocomplete="off">
-                        </div>
-                        <div id="searchResults" class="mt-1 list-group shadow"></div>
-                    </div>
-                </div>
-
-                <div class="row g-4 mb-4">
-                    <div class="col-md-6">
-                        <div class="card card-custom p-3">
-                            <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-chart-pie me-2"></i>Kategori Laporan</h5>
-                            <div class="chart-container" style="position: relative; height:240px;">
-                                <canvas id="categoryChart"></canvas>
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-3 col-lg-2 d-md-block sidebar-maroon p-3 collapse navbar-collapse" id="sidebarMenu">
+                    <div class="position-sticky">
+                        <div class="d-flex align-items-center px-3 mb-4 mt-2">
+                            <div class="rounded-circle bg-light bg-opacity-10 p-2 me-2">
+                                <i class="fa-solid fa-shield-heart text-maroon-light"></i>
+                            </div>
+                            <div>
+                                <p class="small text-white-50 mb-0">Portal</p>
+                                <h6 class="mb-0 text-white">SmartCity</h6>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card card-custom p-3">
-                            <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-chart-column me-2"></i>Tabel Status Laporan</h5>
-                            <div class="chart-container" style="position: relative; height:240px;">
-                                <canvas id="statusChart"></canvas>
-                            </div>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link sidebar-link active p-3" href="#"><i class="fa-solid fa-house me-2"></i> Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link sidebar-link p-3" href="{% url 'main_app:create' %}"><i class="fa-solid fa-plus me-2"></i> Tambah Laporan</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link sidebar-link p-3" href="#section-laporan"><i class="fa-solid fa-list-check me-2"></i> Daftar Laporan Warga</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link sidebar-link p-3" href="#contact-section"><i class="fa-solid fa-phone me-2"></i> Contact</a>
+                            </li>
+                        </ul>
+
+                        <div class="card card-custom p-3 mt-4 mx-2 text-center">
+                            <div class="small fw-bold text-maroon-light mb-1">Emergency Contact</div>
+                            <div class="small"><i class="fa-solid fa-headset me-1 text-warning"></i> CS SmartCity</div>
+                            <a href="https://wa.me/628123456789" target="_blank" class="btn btn-sm btn-success w-100 mt-2 rounded-pill small">
+                                <i class="fa-brands fa-whatsapp me-1"></i> Hubungi WA
+                            </a>
                         </div>
                     </div>
-                </div>
+                </nav>
 
-                <div class="row g-4 mb-4" id="section-laporan">
-                    <div class="col-md-6">
-                        <div class="card card-custom p-3">
-                            <h5 class="card-title text-warning fw-bold mb-3"><i class="fa-solid fa-triangle-exclamation me-2"></i>Daftar Laporan Terbaru</h5>
-                            <div id="latestReportedList" class="d-flex flex-column gap-2">
-                                {% for report in latest_reports %}
-                                    <div class="report-item p-3 d-flex justify-between align-items-center">
-                                        <div>
-                                            <h6 class="m-0 fw-bold text-white">{{ report.title }}</h6>
-                                            <small class="text-muted"><i class="fa-solid fa-location-dot me-1 text-danger"></i>{{ report.location }}</small>
-                                        </div>
-                                        <button class="btn btn-xs btn-outline-warning rounded-pill px-2 py-1 small open-detail" data-id="{{ report.id }}">
-                                            Detail
-                                        </button>
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                    <section class="opening-panel p-4 p-md-5 mb-4">
+                        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+                            <div>
+                                <p class="text-uppercase small text-maroon-light mb-2">Opening</p>
+                                <h1 class="display-6 fw-bold mb-2 typing-text" id="welcomeText">Selamat Datang di SmartCity_APUH</h1>
+                                <p class="text-muted mb-0">Portal pengaduan warga yang modern, cepat, dan aman untuk memperbaiki kota bersama.</p>
+                            </div>
+                            <span class="badge rounded-pill bg-light text-dark px-3 py-2">
+                                <i class="fa-solid fa-signal me-2"></i>{{ total_reports|default:0 }} Total Laporan
+                            </span>
+                        </div>
+                    </section>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="stat-card p-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted small mb-1">Total Laporan</p>
+                                        <h3 class="fw-bold mb-0">{{ total_reports|default:0 }}</h3>
                                     </div>
-                                {% empty %}
-                                    <p class="text-muted text-center py-3 m-0 small">Belum ada laporan masuk terbaru.</p>
-                                {% endfor %}
+                                    <span class="badge bg-light text-dark"><i class="fa-solid fa-file-lines"></i></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card card-custom p-3">
-                            <h5 class="card-title text-success fw-bold mb-3"><i class="fa-solid fa-circle-check me-2"></i>Daftar Laporan Selesai</h5>
-                            <div id="latestResolvedList" class="d-flex flex-column gap-2">
-                                {% for report in resolved_reports %}
-                                    <div class="report-item p-3 d-flex justify-between align-items-center">
-                                        <div>
-                                            <h6 class="m-0 fw-bold text-white-50 text-decoration-line-through">{{ report.title }}</h6>
-                                            <small class="text-muted"><i class="fa-solid fa-calendar-check me-1 text-success"></i>Selesai</small>
-                                        </div>
-                                        <button class="btn btn-xs btn-outline-success rounded-pill px-2 py-1 small open-detail" data-id="{{ report.id }}">
-                                            Lihat
-                                        </button>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="stat-card p-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted small mb-1">Dilaporkan</p>
+                                        <h3 class="fw-bold mb-0">{{ reported_count|default:0 }}</h3>
                                     </div>
-                                {% empty %}
-                                    <p class="text-muted text-center py-3 m-0 small">Belum ada laporan yang diselesaikan.</p>
-                                {% endfor %}
+                                    <span class="badge bg-warning text-dark"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="stat-card p-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted small mb-1">Proses</p>
+                                        <h3 class="fw-bold mb-0">{{ in_progress_count|default:0 }}</h3>
+                                    </div>
+                                    <span class="badge bg-info text-dark"><i class="fa-solid fa-spinner"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="stat-card p-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted small mb-1">Selesai</p>
+                                        <h3 class="fw-bold mb-0">{{ resolved_count|default:0 }}</h3>
+                                    </div>
+                                    <span class="badge bg-success"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row" id="section-tabel-laporan">
-                    <div class="col-12">
+                    <div class="row mb-4">
+                        <div class="col-md-8 position-relative">
+                            <div class="input-group shadow-sm">
+                                <span class="input-group-text bg-dark border-secondary text-white"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                <input type="text" id="searchInput" class="form-control bg-dark text-white border-secondary" placeholder="Cari laporan berdasarkan judul atau lokasi (Live Search)..." autocomplete="off">
+                            </div>
+                            <div id="searchResults" class="mt-1 list-group shadow"></div>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="card card-custom p-3">
+                                <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-chart-pie me-2"></i>Kategori Laporan</h5>
+                                <div class="chart-container" style="position: relative; height:260px;">
+                                    <canvas id="categoryChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card card-custom p-3">
+                                <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-chart-column me-2"></i>Tabel Status Laporan</h5>
+                                <div class="chart-container" style="position: relative; height:260px;">
+                                    <canvas id="statusChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-4" id="section-laporan">
+                        <div class="col-md-6">
+                            <div class="card card-custom p-3">
+                                <h5 class="card-title text-warning fw-bold mb-3"><i class="fa-solid fa-triangle-exclamation me-2"></i>Daftar Laporan Terbaru</h5>
+                                <div id="latestReportedList" class="d-flex flex-column gap-2">
+                                    {% for report in latest_reports %}
+                                        <div class="report-item p-3 d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="m-0 fw-bold text-white">{{ report.title }}</h6>
+                                                <small class="text-muted"><i class="fa-solid fa-location-dot me-1 text-danger"></i>{{ report.location }}</small>
+                                            </div>
+                                            <button class="btn btn-xs btn-outline-warning rounded-pill px-2 py-1 small open-detail" data-id="{{ report.id }}">
+                                                Detail
+                                            </button>
+                                        </div>
+                                    {% empty %}
+                                        <p class="text-muted text-center py-3 m-0 small">Belum ada laporan masuk terbaru.</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card card-custom p-3">
+                                <h5 class="card-title text-success fw-bold mb-3"><i class="fa-solid fa-circle-check me-2"></i>Daftar Laporan Selesai</h5>
+                                <div id="latestResolvedList" class="d-flex flex-column gap-2">
+                                    {% for report in resolved_reports %}
+                                        <div class="report-item p-3 d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="m-0 fw-bold text-white-50 text-decoration-line-through">{{ report.title }}</h6>
+                                                <small class="text-muted"><i class="fa-solid fa-calendar-check me-1 text-success"></i>Selesai</small>
+                                            </div>
+                                            <button class="btn btn-xs btn-outline-success rounded-pill px-2 py-1 small open-detail" data-id="{{ report.id }}">
+                                                Lihat
+                                            </button>
+                                        </div>
+                                    {% empty %}
+                                        <p class="text-muted text-center py-3 m-0 small">Belum ada laporan yang diselesaikan.</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="section-tabel-laporan">
+                        <div class="col-12">
+                            <div class="card card-custom p-4">
+                                <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-table me-2"></i>Ringkasan Tabel Laporan Kategori</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover table-dark-custom rounded border border-secondary text-white m-0">
+                                        <thead>
+                                            <tr class="table-secondary text-dark">
+                                                <th>Nama Kategori</th>
+                                                <th class="text-center" style="width: 250px;">Jumlah Kasus Terdata</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for stat in category_stats %}
+                                            <tr>
+                                                <td class="fw-bold text-info align-middle">{{ stat.category }}</td>
+                                                <td class="text-center align-middle">
+                                                    <span class="badge bg-danger px-3 py-2 rounded-pill">{{ stat.count }} Laporan</span>
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                            <tr>
+                                                <td colspan="2" class="text-center text-muted py-3">Belum ada statistik kategori masuk.</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section id="contact-section" class="mt-4">
                         <div class="card card-custom p-4">
-                            <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-table me-2"></i>Ringkasan Tabel Laporan Kategori</h5>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover table-dark-custom rounded border border-secondary text-white m-0">
-                                    <thead>
-                                        <tr class="table-secondary text-dark">
-                                            <th>Nama Kategori</th>
-                                            <th class="text-center" style="width: 250px;">Jumlah Kasus Terdata</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for stat in category_stats %}
-                                        <tr>
-                                            <td class="fw-bold text-info align-middle">{{ stat.category }}</td>
-                                            <td class="text-center align-middle">
-                                                <span class="badge bg-danger px-3 py-2 rounded-pill">{{ stat.count }} Laporan</span>
-                                            </td>
-                                        </tr>
-                                        {% empty %}
-                                        <tr>
-                                            <td colspan="2" class="text-center text-muted py-3">Belum ada statistik kategori masuk.</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+                            <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-phone me-2"></i>Contact</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <p class="text-muted mb-2">Layanan darurat pengaduan kota</p>
+                                    <h4 class="fw-bold">+62 812 3456 789</h4>
+                                </div>
+                                <div class="col-md-6 text-md-end">
+                                    <a href="https://wa.me/628123456789" target="_blank" class="btn btn-success rounded-pill px-4">
+                                        <i class="fa-brands fa-whatsapp me-2"></i>Hubungi via WhatsApp
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-            </main>
+                    </section>
+                </main>
+            </div>
         </div>
     </div>
 
@@ -265,10 +508,9 @@
             <div class="modal-content bg-dark text-white border-secondary">
                 <div class="modal-header border-secondary bg-dark text-white">
                     <h5 class="modal-title fw-bold text-maroon-light" id="detailModalLabel"><i class="fa-solid fa-circle-info me-2"></i>Detail Informasi Kasus</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-shadow="none" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="modalContent">
-                    </div>
+                <div class="modal-body" id="modalContent"></div>
                 <div class="modal-footer border-secondary">
                     <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Tutup Detail</button>
                 </div>
@@ -279,25 +521,54 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'js/dashboard.js' %}"></script>
-    
+
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Mengambil data dinamis yang dikirim views Django ke tabel untuk dimasukkan ke Chart
+        document.addEventListener('DOMContentLoaded', function () {
+            const splash = document.getElementById('splashScreen');
+            const dashboard = document.getElementById('dashboardShell');
+            const welcomeText = document.getElementById('welcomeText');
+            const text = 'Selamat Datang di SmartCity_APUH';
+            const shouldShowSplash = sessionStorage.getItem('smartcity_splash') !== 'shown';
+
+            if (shouldShowSplash) {
+                setTimeout(function () {
+                    splash.classList.add('hidden');
+                    dashboard.classList.add('show');
+                    setTimeout(function () {
+                        sessionStorage.setItem('smartcity_splash', 'shown');
+                    }, 300);
+                }, 2600);
+            } else {
+                splash.style.display = 'none';
+                dashboard.classList.add('show');
+            }
+
+            let index = 0;
+            function typeText() {
+                if (index <= text.length) {
+                    welcomeText.textContent = text.slice(0, index);
+                    index++;
+                    setTimeout(typeText, 60);
+                }
+            }
+
+            setTimeout(function () {
+                typeText();
+            }, shouldShowSplash ? 3200 : 300);
+
             const categories = [];
             const counts = [];
-            
+
             {% for stat in category_stats %}
                 categories.push("{{ stat.category }}");
                 counts.push({{ stat.count }});
             {% endfor %}
 
-            // Pencegahan bug jika data kosong agar chart tidak error ter-render
             if (categories.length === 0) {
-                categories.push("Belum Ada Data");
+                categories.push('Belum Ada Data');
                 counts.push(0);
             }
 
-            // Inisialisasi Category Chart
             const ctxCategory = document.getElementById('categoryChart');
             if (ctxCategory) {
                 new Chart(ctxCategory, {
@@ -306,7 +577,7 @@
                         labels: categories,
                         datasets: [{
                             data: counts,
-                            backgroundColor: ['#e63946', '#f1faee', '#a8dadc', '#457b9d', '#1d3557'],
+                            backgroundColor: ['#d64550', '#f7a8b0', '#f0c26b', '#88c4d0', '#8a5dff'],
                             borderWidth: 1,
                             borderColor: 'rgba(255,255,255,0.1)'
                         }]
@@ -314,7 +585,11 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { labels: { color: '#f8f9fa' } } }
+                        plugins: {
+                            legend: {
+                                labels: { color: '#f8f9fa' }
+                            }
+                        }
                     }
                 });
             }
