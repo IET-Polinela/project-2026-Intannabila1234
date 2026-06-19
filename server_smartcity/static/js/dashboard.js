@@ -11,8 +11,8 @@
 // ============================================================
 // CONFIGURATION - ENDPOINT SERVER PRODUKSI
 // ============================================================
-// Menggunakan alamat IP Publik dan Port Publik Server Backend milikmu
-const BASE_URL = "";
+// Gunakan URL server kampus yang diminta oleh user
+const BASE_URL = "http://103.151.63.87:8009";
 
 // ============================================================
 // DEBOUNCE FUNCTION - Untuk Live Search
@@ -41,7 +41,7 @@ let categoryChart = null;
  */
 async function fetchStatusStatistics() {
     try {
-        const response = await fetch(`${BASE_URL}/main_app/api/status-statistics/`);
+        const response = await fetch(`${BASE_URL}/main/api/status-statistics/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -58,7 +58,7 @@ async function fetchStatusStatistics() {
  */
 async function fetchCategoryStatistics() {
     try {
-        const response = await fetch(`${BASE_URL}/main_app/api/category-statistics/`);
+        const response = await fetch(`${BASE_URL}/main/api/category-statistics/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -75,7 +75,7 @@ async function fetchCategoryStatistics() {
  */
 async function fetchLatestReported() {
     try {
-        const response = await fetch(`${BASE_URL}/main_app/api/latest-reported/`);
+        const response = await fetch(`${BASE_URL}/main/api/latest-reported/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -92,7 +92,7 @@ async function fetchLatestReported() {
  */
 async function fetchLatestResolved() {
     try {
-        const response = await fetch(`${BASE_URL}/main_app/api/latest-resolved/`);
+        const response = await fetch(`${BASE_URL}/main/api/latest-resolved/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -110,7 +110,7 @@ async function fetchLatestResolved() {
  */
 async function searchReports(query) {
     try {
-        const response = await fetch(`${BASE_URL}/main_app/api/search/?q=${encodeURIComponent(query)}`);
+        const response = await fetch(`${BASE_URL}/main/api/search/?q=${encodeURIComponent(query)}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -128,7 +128,7 @@ async function searchReports(query) {
  */
 async function fetchReportDetail(reportId) {
     try {
-        const response = await fetch(`${BASE_URL}/main_app/api/detail/${reportId}/`);
+        const response = await fetch(`${BASE_URL}/main/api/detail/${reportId}/`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
