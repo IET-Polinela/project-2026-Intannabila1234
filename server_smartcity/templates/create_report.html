@@ -3,17 +3,16 @@
 {% block content %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/">Home</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'main_app:reports_list' %}">Reports</a></li>
-    <li class="breadcrumb-item active">Create Report</li>
+    <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active">Tambah Laporan</li>
   </ol>
 </nav>
 
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h4><i class="bi bi-plus-circle"></i> Tambah Laporan Baru</h4>
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Tambah Laporan Baru</h4>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -23,12 +22,20 @@
                         <input type="text" name="title" id="id_title" class="form-control" required>
                     </div>
                     <div class="mb-3">
+                        <label for="id_category" class="form-label">Kategori</label>
+                        <input type="text" name="category" id="id_category" class="form-control" placeholder="Contoh: Jalan, Sampah, Lampu">
+                    </div>
+                    <div class="mb-3">
                         <label for="id_location" class="form-label">Lokasi</label>
                         <input type="text" name="location" id="id_location" class="form-control" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="id_description" class="form-label">Deskripsi</label>
+                        <textarea name="description" id="id_description" class="form-control" rows="4"></textarea>
+                    </div>
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Simpan</button>
-                        <a href="{% url 'main_app:reports_list' %}" class="btn btn-secondary">Batal</a>
+                        <a href="{% url 'dashboard:index' %}" class="btn btn-secondary">Batal</a>
                     </div>
                 </form>
             </div>

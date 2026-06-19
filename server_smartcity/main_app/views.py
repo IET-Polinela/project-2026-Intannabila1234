@@ -46,15 +46,24 @@ def reports_list(request):
     return render(request, 'reports_list.html', context)
 
 
-@_admin_required
 def create_report(request):
     if request.method == 'POST':
-        title    = request.POST.get('title', '').strip()
-        location = request.POST.get('location', '').strip()
+        title       = request.POST.get('title', '').strip()
+        location    = request.POST.get('location', '').strip()
+        category    = request.POST.get('category', 'Lainnya').strip() or 'Lainnya'
+        description = request.POST.get('description', '').strip()
+
         if title:
-            Report.objects.create(title=title, location=location, status='REPORTED')
+            Report.objects.create(
+                title=title,
+                location=location,
+                category=category,
+                description=description,
+                reporter=request.user if request.user.is_authenticated else None,
+                status='REPORTED'
+            )
             messages.success(request, 'Laporan berhasil dibuat!')
-        return redirect('main_app:reports_list')
+        return redirect('dashboard:index')
     return render(request, 'create_report.html')
 
 

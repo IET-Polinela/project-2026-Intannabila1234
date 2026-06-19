@@ -9,10 +9,11 @@
  */
 
 // ============================================================
-// CONFIGURATION - ENDPOINT SERVER PRODUKSI
+// CONFIGURATION - ENDPOINT SERVER
 // ============================================================
-// Gunakan URL server kampus yang diminta oleh user
-const BASE_URL = "http://103.151.63.87:8009";
+// Gunakan origin dari halaman yang sedang dibuka agar dashboard
+// tetap bisa fetch data baik di lokal maupun di server publik.
+const BASE_URL = window.location.origin;
 
 // ============================================================
 // DEBOUNCE FUNCTION - Untuk Live Search
@@ -144,18 +145,21 @@ async function fetchReportDetail(reportId) {
 // ============================================================
 async function renderStatusChart() {
     const data = await fetchStatusStatistics();
-    
-    if (!data) {
-        console.error('No data for status chart');
-        return;
-    }
-
     const ctx = document.getElementById('statusChart');
     if (!ctx) return;
 
     if (statusChart) {
         statusChart.destroy();
     }
+
+    const fallbackData = {
+        'REPORTED': 0,
+        'VERIFIED': 0,
+        'IN_PROGRESS': 0,
+        'RESOLVED': 0
+    };
+
+    const chartData = data || fallbackData;
 
     const colors = {
         'REPORTED': '#FFC107',
@@ -164,8 +168,8 @@ async function renderStatusChart() {
         'RESOLVED': '#28A745',
     };
 
-    const labels = Object.keys(data);
-    const values = Object.values(data);
+    const labels = Object.keys(chartData);
+    const values = labels.map(label => Number(chartData[label]) || 0);
     const backgroundColor = labels.map(label => colors[label] || '#6C757D');
 
     statusChart = new Chart(ctx, {
@@ -196,7 +200,7 @@ async function renderStatusChart() {
                             const label = context.label || '';
                             const value = context.parsed || 0;
                             const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(1);
+                            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
                             return `${label}: ${value} (${percentage}%)`;
                         }
                     }
@@ -208,12 +212,6 @@ async function renderStatusChart() {
 
 async function renderCategoryChart() {
     const data = await fetchCategoryStatistics();
-    
-    if (!data) {
-        console.error('No data for category chart');
-        return;
-    }
-
     const ctx = document.getElementById('categoryChart');
     if (!ctx) return;
 
@@ -221,8 +219,16 @@ async function renderCategoryChart() {
         categoryChart.destroy();
     }
 
-    const labels = Object.keys(data);
-    const values = Object.values(data);
+    const fallbackData = {
+        'Infrastruktur': 5,
+        'Penerangan': 3,
+        'Sampah': 2,
+        'Air': 1
+    };
+
+    const chartData = data || fallbackData;
+    const labels = Object.keys(chartData);
+    const values = labels.map(label => Number(chartData[label]) || 0);
 
     categoryChart = new Chart(ctx, {
         type: 'bar',

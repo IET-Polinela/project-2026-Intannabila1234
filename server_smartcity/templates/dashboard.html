@@ -6,38 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartCity_Apuh - Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-1: #3b0d12;
-            --bg-2: #1f0507;
-            --surface: rgba(255, 255, 255, 0.06);
+            --bg-1: #2b050a;
+            --bg-2: #120307;
+            --surface: rgba(255, 255, 255, 0.05);
             --surface-2: rgba(255, 255, 255, 0.08);
+            --surface-3: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.08);
-            --text: #f7eef0;
-            --muted: #c7a5aa;
-            --primary: #b8404e;
-            --primary-2: #f0a1a8;
-            --success: #26a96c;
-            --warning: #f5b942;
-            --shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+            --text: #f9eef0;
+            --muted: #d2a9af;
+            --primary: #8f1f2e;
+            --primary-2: #d86b79;
+            --primary-3: #f2b2b9;
+            --success: #24b46b;
+            --warning: #f1bd4a;
+            --shadow: 0 22px 50px rgba(0, 0, 0, 0.38);
         }
 
-        * {
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             color: var(--text);
             background:
-                radial-gradient(circle at top, rgba(170, 52, 66, 0.15), transparent 22%),
+                radial-gradient(circle at top, rgba(143, 31, 46, 0.18), transparent 20%),
                 linear-gradient(135deg, var(--bg-1), var(--bg-2));
             overflow-x: hidden;
         }
@@ -50,7 +46,7 @@
             align-items: center;
             justify-content: center;
             background:
-                radial-gradient(circle at center, rgba(55, 12, 17, 0.95), rgba(15, 3, 5, 0.98));
+                radial-gradient(circle at center, rgba(70, 10, 18, 0.96), rgba(12, 2, 4, 0.99));
             transition: opacity 0.8s ease, visibility 0.8s ease;
         }
 
@@ -61,26 +57,36 @@
 
         .globe-wrap {
             position: relative;
-            width: 220px;
-            height: 220px;
+            width: 260px;
+            height: 260px;
             display: flex;
             align-items: center;
             justify-content: center;
             animation: zoomPulse 2.6s ease-in-out infinite;
         }
 
+        .globe-ring {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transform: perspective(600px) rotateX(68deg);
+            animation: ringPulse 3.2s ease-in-out infinite;
+        }
+
         .globe {
             position: relative;
-            width: 180px;
-            height: 180px;
+            width: 190px;
+            height: 190px;
             border-radius: 50%;
             background:
-                radial-gradient(circle at 30% 30%, #f7b4b9 0%, #b8404e 35%, #5a1118 70%, #180507 100%);
+                radial-gradient(circle at 30% 28%, #f9ced2 0%, #d86b79 32%, #7a1420 68%, #130308 100%);
             box-shadow:
-                inset -18px -18px 40px rgba(0, 0, 0, 0.5),
-                inset 12px 12px 20px rgba(255, 255, 255, 0.08),
-                0 0 40px rgba(184, 64, 78, 0.28);
-            animation: globeSpin 3.5s linear infinite;
+                inset -16px -18px 32px rgba(0, 0, 0, 0.45),
+                inset 12px 12px 18px rgba(255, 255, 255, 0.08),
+                0 0 48px rgba(143, 31, 46, 0.22);
+            animation: globeSpin 4s linear infinite;
             overflow: hidden;
         }
 
@@ -90,39 +96,28 @@
             position: absolute;
             border-radius: 50%;
             background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-            opacity: 0.7;
         }
 
         .globe::before {
             width: 100%;
-            height: 12px;
+            height: 10px;
             top: 48%;
             left: 0;
             transform: rotate(22deg);
         }
 
         .globe::after {
-            width: 72%;
-            height: 72%;
-            left: 14%;
-            top: 14%;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .globe-ring {
-            position: absolute;
-            width: 230px;
-            height: 230px;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transform: perspective(600px) rotateX(68deg);
-            animation: ringPulse 3s ease-in-out infinite;
+            width: 74%;
+            height: 74%;
+            left: 13%;
+            top: 13%;
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
         .dashboard-shell {
             opacity: 0;
-            transform: translateY(14px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
+            transform: translateY(18px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
         .dashboard-shell.show {
@@ -131,28 +126,28 @@
         }
 
         .navbar-maroon {
-            background: linear-gradient(90deg, rgba(37, 8, 11, 0.94), rgba(78, 18, 24, 0.94));
-            backdrop-filter: blur(12px);
+            background: linear-gradient(90deg, rgba(24, 3, 7, 0.93), rgba(75, 12, 19, 0.93));
+            backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.24);
         }
 
         .sidebar-maroon {
-            background: linear-gradient(180deg, rgba(18, 5, 7, 0.96), rgba(37, 9, 12, 0.96));
+            background: linear-gradient(180deg, rgba(14, 4, 6, 0.98), rgba(38, 7, 11, 0.98));
             border-right: 1px solid var(--border);
-            min-height: calc(100vh - 72px);
+            min-height: calc(100vh - 70px);
         }
 
         .sidebar-link {
-            color: rgba(255, 255, 255, 0.78);
-            border-radius: 0.8rem;
+            color: rgba(255, 255, 255, 0.82);
+            border-radius: 0.9rem;
             margin-bottom: 0.35rem;
-            transition: all 0.2s ease;
+            transition: all 0.22s ease;
         }
 
         .sidebar-link:hover,
         .sidebar-link.active {
-            background: linear-gradient(90deg, rgba(184, 64, 78, 0.9), rgba(109, 24, 33, 0.9));
+            background: linear-gradient(90deg, rgba(143, 31, 46, 0.88), rgba(216, 107, 121, 0.18));
             color: #fff;
         }
 
@@ -162,29 +157,34 @@
             backdrop-filter: blur(14px);
             border-radius: 1rem;
             box-shadow: var(--shadow);
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            transition: transform 0.18s ease, border-color 0.18s ease;
         }
 
         .card-custom:hover {
             transform: translateY(-2px);
-            border-color: rgba(240, 161, 168, 0.45);
+            border-color: rgba(242, 178, 185, 0.45);
         }
 
-        .text-maroon-light {
-            color: var(--primary-2);
+        .opening-panel {
+            background:
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+                radial-gradient(circle at top right, rgba(143, 31, 46, 0.22), transparent 18%);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
         }
 
         .stat-card {
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
             border: 1px solid var(--border);
             border-radius: 1rem;
-            min-height: 120px;
+            min-height: 124px;
         }
 
         .report-item {
             background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
             border: 1px solid var(--border);
-            border-radius: 0.9rem;
+            border-radius: 0.95rem;
             transition: all 0.2s ease;
         }
 
@@ -192,28 +192,27 @@
             background: rgba(255, 255, 255, 0.08);
         }
 
-        .opening-panel {
-            background:
-                linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
-                radial-gradient(circle at top right, rgba(184, 64, 78, 0.22), transparent 18%);
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            box-shadow: var(--shadow);
-        }
-
         .typing-text::after {
             content: '|';
             display: inline-block;
-            color: var(--primary-2);
-            animation: blink 0.8s infinite;
+            color: var(--primary-3);
+            animation: blink 0.85s infinite;
         }
 
         #searchResults {
             position: absolute;
             width: 100%;
             z-index: 1050;
-            max-height: 320px;
+            max-height: 340px;
             overflow-y: auto;
+        }
+
+        .table-dark-custom thead th {
+            background: #f3d4d8 !important;
+        }
+
+        .table-dark-custom tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
         }
 
         @keyframes globeSpin {
@@ -222,8 +221,8 @@
         }
 
         @keyframes ringPulse {
-            0%, 100% { transform: perspective(600px) rotateX(68deg) scale(0.96); opacity: 0.4; }
-            50% { transform: perspective(600px) rotateX(68deg) scale(1.04); opacity: 0.85; }
+            0%, 100% { transform: perspective(600px) rotateX(68deg) scale(0.96); opacity: 0.38; }
+            50% { transform: perspective(600px) rotateX(68deg) scale(1.06); opacity: 0.82; }
         }
 
         @keyframes zoomPulse {
@@ -248,14 +247,19 @@
     <div class="dashboard-shell" id="dashboardShell">
         <nav class="navbar navbar-expand-lg navbar-dark navbar-maroon sticky-top py-3">
             <div class="container-fluid px-4">
-                <a class="navbar-brand fw-bold text-uppercase tracking-wider" href="#">
-                    <i class="fa-solid fa-city me-2 text-maroon-light"></i>SmartCity_Apuh
+                <a class="navbar-brand fw-bold text-uppercase" href="#">
+                    <i class="fa-solid fa-city me-2 text-white"></i>SmartCity_Apuh
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="topNavbar">
                     <ul class="navbar-nav align-items-center gap-2">
+                        <li class="nav-item">
+                            <button class="btn btn-sm btn-outline-light rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#addReportModal">
+                                <i class="fa-solid fa-plus me-1"></i>Tambah Laporan
+                            </button>
+                        </li>
                         {% if user.is_authenticated %}
                             <li class="nav-item me-2">
                                 <span class="text-light small"><i class="fa-solid fa-user-shield me-1"></i> Welcome, {{ user.username }}</span>
@@ -285,7 +289,7 @@
                     <div class="position-sticky">
                         <div class="d-flex align-items-center px-3 mb-4 mt-2">
                             <div class="rounded-circle bg-light bg-opacity-10 p-2 me-2">
-                                <i class="fa-solid fa-shield-heart text-maroon-light"></i>
+                                <i class="fa-solid fa-shield-heart text-white"></i>
                             </div>
                             <div>
                                 <p class="small text-white-50 mb-0">Portal</p>
@@ -297,10 +301,10 @@
                                 <a class="nav-link sidebar-link active p-3" href="#"><i class="fa-solid fa-house me-2"></i> Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link sidebar-link p-3" href="{% url 'main_app:create' %}"><i class="fa-solid fa-plus me-2"></i> Tambah Laporan</a>
+                                <a class="nav-link sidebar-link p-3" href="#" data-bs-toggle="modal" data-bs-target="#addReportModal"><i class="fa-solid fa-plus me-2"></i> Tambah Laporan</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link sidebar-link p-3" href="#section-laporan"><i class="fa-solid fa-list-check me-2"></i> Daftar Laporan Warga</a>
+                                <a class="nav-link sidebar-link p-3" href="#section-laporan"><i class="fa-solid fa-list-check me-2"></i> Laporan Warga</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link sidebar-link p-3" href="#contact-section"><i class="fa-solid fa-phone me-2"></i> Contact</a>
@@ -308,8 +312,8 @@
                         </ul>
 
                         <div class="card card-custom p-3 mt-4 mx-2 text-center">
-                            <div class="small fw-bold text-maroon-light mb-1">Emergency Contact</div>
-                            <div class="small"><i class="fa-solid fa-headset me-1 text-warning"></i> CS SmartCity</div>
+                            <div class="small fw-bold text-white mb-1">Emergency Contact</div>
+                            <div class="small text-muted"><i class="fa-solid fa-headset me-1 text-warning"></i> CS SmartCity</div>
                             <a href="https://wa.me/628123456789" target="_blank" class="btn btn-sm btn-success w-100 mt-2 rounded-pill small">
                                 <i class="fa-brands fa-whatsapp me-1"></i> Hubungi WA
                             </a>
@@ -321,8 +325,8 @@
                     <section class="opening-panel p-4 p-md-5 mb-4">
                         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
                             <div>
-                                <p class="text-uppercase small text-maroon-light mb-2">Opening</p>
-                                <h1 class="display-6 fw-bold mb-2 typing-text" id="welcomeText">Selamat Datang di SmartCity_APUH</h1>
+                                <p class="text-uppercase small mb-2" style="color: var(--primary-3);">Opening</p>
+                                <h1 class="display-6 fw-bold mb-2 typing-text" id="welcomeText">Selamat datang di smartcity APUH</h1>
                                 <p class="text-muted mb-0">Portal pengaduan warga yang modern, cepat, dan aman untuk memperbaiki kota bersama.</p>
                             </div>
                             <span class="badge rounded-pill bg-light text-dark px-3 py-2">
@@ -382,7 +386,7 @@
                         <div class="col-md-8 position-relative">
                             <div class="input-group shadow-sm">
                                 <span class="input-group-text bg-dark border-secondary text-white"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                <input type="text" id="searchInput" class="form-control bg-dark text-white border-secondary" placeholder="Cari laporan berdasarkan judul atau lokasi (Live Search)..." autocomplete="off">
+                                <input type="text" id="searchInput" class="form-control bg-dark text-white border-secondary" placeholder="Cari laporan berdasarkan judul atau lokasi..." autocomplete="off">
                             </div>
                             <div id="searchResults" class="mt-1 list-group shadow"></div>
                         </div>
@@ -391,16 +395,16 @@
                     <div class="row g-4 mb-4">
                         <div class="col-md-6">
                             <div class="card card-custom p-3">
-                                <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-chart-pie me-2"></i>Kategori Laporan</h5>
-                                <div class="chart-container" style="position: relative; height:260px;">
+                                <h5 class="card-title text-white fw-bold mb-3"><i class="fa-solid fa-chart-pie me-2"></i>Kategori Laporan</h5>
+                                <div class="chart-container" style="position: relative; height: 270px;">
                                     <canvas id="categoryChart"></canvas>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="card card-custom p-3">
-                                <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-chart-column me-2"></i>Tabel Status Laporan</h5>
-                                <div class="chart-container" style="position: relative; height:260px;">
+                                <h5 class="card-title text-white fw-bold mb-3"><i class="fa-solid fa-chart-column me-2"></i>Tabel Status Laporan</h5>
+                                <div class="chart-container" style="position: relative; height: 270px;">
                                     <canvas id="statusChart"></canvas>
                                 </div>
                             </div>
@@ -418,12 +422,17 @@
                                                 <h6 class="m-0 fw-bold text-white">{{ report.title }}</h6>
                                                 <small class="text-muted"><i class="fa-solid fa-location-dot me-1 text-danger"></i>{{ report.location }}</small>
                                             </div>
-                                            <button class="btn btn-xs btn-outline-warning rounded-pill px-2 py-1 small open-detail" data-id="{{ report.id }}">
-                                                Detail
-                                            </button>
+                                            <button class="btn btn-xs btn-outline-warning rounded-pill px-2 py-1 small open-detail" data-id="{{ report.id }}">Detail</button>
                                         </div>
                                     {% empty %}
-                                        <p class="text-muted text-center py-3 m-0 small">Belum ada laporan masuk terbaru.</p>
+                                        <div class="report-item p-3">
+                                            <h6 class="m-0 fw-bold text-white">Jalan Berlubang di Rajabasa</h6>
+                                            <small class="text-muted"><i class="fa-solid fa-location-dot me-1 text-danger"></i>Rajabasa, Bandar Lampung</small>
+                                        </div>
+                                        <div class="report-item p-3">
+                                            <h6 class="m-0 fw-bold text-white">Lampu Penerangan Padam</h6>
+                                            <small class="text-muted"><i class="fa-solid fa-location-dot me-1 text-danger"></i>Jl. Sudirman, Bandar Lampung</small>
+                                        </div>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -438,12 +447,17 @@
                                                 <h6 class="m-0 fw-bold text-white-50 text-decoration-line-through">{{ report.title }}</h6>
                                                 <small class="text-muted"><i class="fa-solid fa-calendar-check me-1 text-success"></i>Selesai</small>
                                             </div>
-                                            <button class="btn btn-xs btn-outline-success rounded-pill px-2 py-1 small open-detail" data-id="{{ report.id }}">
-                                                Lihat
-                                            </button>
+                                            <button class="btn btn-xs btn-outline-success rounded-pill px-2 py-1 small open-detail" data-id="{{ report.id }}">Lihat</button>
                                         </div>
                                     {% empty %}
-                                        <p class="text-muted text-center py-3 m-0 small">Belum ada laporan yang diselesaikan.</p>
+                                        <div class="report-item p-3">
+                                            <h6 class="m-0 fw-bold text-white-50 text-decoration-line-through">Perbaikan Saluran Air Selesai</h6>
+                                            <small class="text-muted"><i class="fa-solid fa-calendar-check me-1 text-success"></i>Selesai</small>
+                                        </div>
+                                        <div class="report-item p-3">
+                                            <h6 class="m-0 fw-bold text-white-50 text-decoration-line-through">Penggantian Lampu Jalan</h6>
+                                            <small class="text-muted"><i class="fa-solid fa-calendar-check me-1 text-success"></i>Selesai</small>
+                                        </div>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -453,9 +467,9 @@
                     <div class="row" id="section-tabel-laporan">
                         <div class="col-12">
                             <div class="card card-custom p-4">
-                                <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-table me-2"></i>Ringkasan Tabel Laporan Kategori</h5>
+                                <h5 class="card-title text-white fw-bold mb-3"><i class="fa-solid fa-table me-2"></i>Ringkasan Tabel Laporan Kategori</h5>
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-hover table-dark-custom rounded border border-secondary text-white m-0">
+                                    <table class="table table-dark table-hover align-middle mb-0 rounded overflow-hidden">
                                         <thead>
                                             <tr class="table-secondary text-dark">
                                                 <th>Nama Kategori</th>
@@ -463,16 +477,30 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for stat in category_stats %}
+                                            {% for report in reports %}
                                             <tr>
-                                                <td class="fw-bold text-info align-middle">{{ stat.category }}</td>
-                                                <td class="text-center align-middle">
-                                                    <span class="badge bg-danger px-3 py-2 rounded-pill">{{ stat.count }} Laporan</span>
+                                                <td>
+                                                    <div class="fw-bold text-white">{{ report.title }}</div>
+                                                    <div class="small text-muted">{{ report.category|default:"Kategori Umum" }}</div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-danger rounded-pill px-3 py-2">{{ report.status|default:"REPORTED" }}</span>
                                                 </td>
                                             </tr>
                                             {% empty %}
                                             <tr>
-                                                <td colspan="2" class="text-center text-muted py-3">Belum ada statistik kategori masuk.</td>
+                                                <td>
+                                                    <div class="fw-bold text-white">Jalan Berlubang di Rajabasa</div>
+                                                    <div class="small text-muted">Infrastruktur</div>
+                                                </td>
+                                                <td class="text-center"><span class="badge bg-danger rounded-pill px-3 py-2">REPORTED</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="fw-bold text-white">Lampu Penerangan Padam</div>
+                                                    <div class="small text-muted">Penerangan</div>
+                                                </td>
+                                                <td class="text-center"><span class="badge bg-warning rounded-pill px-3 py-2">VERIFIED</span></td>
                                             </tr>
                                             {% endfor %}
                                         </tbody>
@@ -484,14 +512,27 @@
 
                     <section id="contact-section" class="mt-4">
                         <div class="card card-custom p-4">
-                            <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-phone me-2"></i>Contact</h5>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <p class="text-muted mb-2">Layanan darurat pengaduan kota</p>
-                                    <h4 class="fw-bold">+62 812 3456 789</h4>
+                            <div class="row g-4 align-items-center">
+                                <div class="col-lg-8">
+                                    <h5 class="card-title text-white fw-bold mb-3"><i class="fa-solid fa-phone me-2"></i>Contact</h5>
+                                    <p class="text-muted mb-3">Layanan pengaduan darurat dan informasi kota</p>
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <span class="badge rounded-pill bg-light text-dark p-2"><i class="fa-solid fa-user"></i></span>
+                                            <span><strong>Nama:</strong> Intan Nabila</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <span class="badge rounded-pill bg-light text-dark p-2"><i class="fa-solid fa-id-card"></i></span>
+                                            <span><strong>NPM:</strong> 24782077</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <span class="badge rounded-pill bg-light text-dark p-2"><i class="fa-solid fa-phone"></i></span>
+                                            <span><strong>No. Telepon:</strong> 085709379692</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 text-md-end">
-                                    <a href="https://wa.me/628123456789" target="_blank" class="btn btn-success rounded-pill px-4">
+                                <div class="col-lg-4 text-lg-end">
+                                    <a href="https://wa.me/6285709379692" target="_blank" class="btn btn-success rounded-pill px-4 py-2">
                                         <i class="fa-brands fa-whatsapp me-2"></i>Hubungi via WhatsApp
                                     </a>
                                 </div>
@@ -503,11 +544,60 @@
         </div>
     </div>
 
+    <div class="modal fade" id="addReportModal" tabindex="-1" aria-labelledby="addReportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-dark text-white border-secondary">
+                <div class="modal-header border-secondary bg-dark text-white">
+                    <h5 class="modal-title fw-bold text-white" id="addReportModalLabel">
+                        <i class="fa-solid fa-file-circle-plus me-2"></i>Tambah Laporan Baru
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'dashboard:add_report' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="title" class="form-label">Judul Laporan</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10 text-white border-secondary" id="title" name="title" placeholder="Contoh: Jalan berlubang di Rajabasa" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="category" class="form-label">Kategori</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10 text-white border-secondary" id="category" name="category" placeholder="Contoh: Infrastruktur" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="location" class="form-label">Lokasi</label>
+                                <input type="text" class="form-control bg-secondary bg-opacity-10 text-white border-secondary" id="location" name="location" placeholder="Contoh: Jl. Sudirman, Bandar Lampung" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="description" class="form-label">Deskripsi</label>
+                                <textarea class="form-control bg-secondary bg-opacity-10 text-white border-secondary" id="description" name="description" rows="4" placeholder="Jelaskan masalah yang terjadi..." required></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select bg-secondary bg-opacity-10 text-white border-secondary" id="status" name="status">
+                                    <option value="REPORTED">Reported</option>
+                                    <option value="VERIFIED">Verified</option>
+                                    <option value="IN_PROGRESS">In Progress</option>
+                                    <option value="RESOLVED">Resolved</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-secondary">
+                        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger rounded-pill px-4">Simpan Laporan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content bg-dark text-white border-secondary">
                 <div class="modal-header border-secondary bg-dark text-white">
-                    <h5 class="modal-title fw-bold text-maroon-light" id="detailModalLabel"><i class="fa-solid fa-circle-info me-2"></i>Detail Informasi Kasus</h5>
+                    <h5 class="modal-title fw-bold text-white" id="detailModalLabel"><i class="fa-solid fa-circle-info me-2"></i>Detail Informasi Kasus</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalContent"></div>
@@ -521,25 +611,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'js/dashboard.js' %}"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const splash = document.getElementById('splashScreen');
             const dashboard = document.getElementById('dashboardShell');
             const welcomeText = document.getElementById('welcomeText');
             const text = 'Selamat Datang di SmartCity_APUH';
-            const shouldShowSplash = sessionStorage.getItem('smartcity_splash') !== 'shown';
 
-            if (shouldShowSplash) {
+            if (splash && dashboard) {
                 setTimeout(function () {
                     splash.classList.add('hidden');
-                    dashboard.classList.add('show');
                     setTimeout(function () {
-                        sessionStorage.setItem('smartcity_splash', 'shown');
-                    }, 300);
-                }, 2600);
-            } else {
-                splash.style.display = 'none';
+                        dashboard.classList.add('show');
+                    }, 180);
+                }, 2500);
+            } else if (dashboard) {
                 dashboard.classList.add('show');
             }
 
@@ -548,51 +634,13 @@
                 if (index <= text.length) {
                     welcomeText.textContent = text.slice(0, index);
                     index++;
-                    setTimeout(typeText, 60);
+                    setTimeout(typeText, 50);
                 }
             }
 
             setTimeout(function () {
                 typeText();
-            }, shouldShowSplash ? 3200 : 300);
-
-            const categories = [];
-            const counts = [];
-
-            {% for stat in category_stats %}
-                categories.push("{{ stat.category }}");
-                counts.push({{ stat.count }});
-            {% endfor %}
-
-            if (categories.length === 0) {
-                categories.push('Belum Ada Data');
-                counts.push(0);
-            }
-
-            const ctxCategory = document.getElementById('categoryChart');
-            if (ctxCategory) {
-                new Chart(ctxCategory, {
-                    type: 'doughnut',
-                    data: {
-                        labels: categories,
-                        datasets: [{
-                            data: counts,
-                            backgroundColor: ['#d64550', '#f7a8b0', '#f0c26b', '#88c4d0', '#8a5dff'],
-                            borderWidth: 1,
-                            borderColor: 'rgba(255,255,255,0.1)'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                labels: { color: '#f8f9fa' }
-                            }
-                        }
-                    }
-                });
-            }
+            }, 800);
         });
     </script>
 </body>
