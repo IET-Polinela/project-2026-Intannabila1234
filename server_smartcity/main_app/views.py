@@ -143,7 +143,7 @@ def report_detail(request, report_id):
 # ---------------------------------------------------------------------------
 
 class DashboardView(TemplateView):
-    template_name = 'dashboard.html'
+    template_name = 'index.html'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

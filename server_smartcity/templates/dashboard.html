@@ -72,6 +72,17 @@
             max-height: 300px;
             overflow-y: auto;
         }
+        
+        /* Tambahan penyesuaian kecil agar list item laporan terlihat konsisten */
+        .report-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.75rem;
+            transition: all 0.2s;
+        }
+        .report-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
     </style>
 </head>
 <body>
@@ -87,10 +98,13 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-center">
                     <li class="nav-item me-3">
-                        <span class="text-light small"><i class="fa-solid fa-user-shield me-1"></i> Admin</span>
+                        <span class="text-light small"><i class="fa-solid fa-user-shield me-1"></i> Welcome, {{ user.username }}</span>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-sm btn-outline-light rounded-pill px-3" href="/logout/">Logout</a>
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-light rounded-pill px-3">Logout</button>
+                        </form>
                     </li>
                 </ul>
             </div>
@@ -144,7 +158,7 @@
                             <span class="input-group-text bg-dark border-secondary text-white"><i class="fa-solid fa-magnifying-glass"></i></span>
                             <input type="text" id="searchInput" class="form-control bg-dark text-white border-secondary" placeholder="Cari laporan berdasarkan judul atau lokasi (Live Search)..." autocomplete="off">
                         </div>
-                        <div id="searchResults" class="mt-1"></div>
+                        <div id="searchResults" class="mt-1 list-group shadow"></div>
                     </div>
                 </div>
 
@@ -171,15 +185,41 @@
                     <div class="col-md-6">
                         <div class="card card-custom p-3">
                             <h5 class="card-title text-warning fw-bold mb-3"><i class="fa-solid fa-triangle-exclamation me-2"></i>Daftar Laporan Terbaru</h5>
-                            <div id="latestReportedList">
-                                </div>
+                            <div id="latestReportedList" class="d-flex flex-column gap-2">
+                                {% for report in latest_reports %}
+                                    <div class="report-item p-3 d-flex justify-between align-items-center">
+                                        <div>
+                                            <h6 class="m-0 fw-bold text-white">{{ report.title }}</h6>
+                                            <small class="text-muted"><i class="fa-solid fa-location-dot me-1 text-danger"></i>{{ report.location }}</small>
+                                        </div>
+                                        <button class="btn btn-xs btn-outline-warning rounded-pill px-2 py-1 small open-detail" data-id="{{ report.id }}">
+                                            Detail
+                                        </button>
+                                    </div>
+                                {% empty %}
+                                    <p class="text-muted text-center py-3 m-0 small">Belum ada laporan masuk terbaru.</p>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="card card-custom p-3">
                             <h5 class="card-title text-success fw-bold mb-3"><i class="fa-solid fa-circle-check me-2"></i>Daftar Laporan Selesai</h5>
-                            <div id="latestResolvedList">
-                                </div>
+                            <div id="latestResolvedList" class="d-flex flex-column gap-2">
+                                {% for report in resolved_reports %}
+                                    <div class="report-item p-3 d-flex justify-between align-items-center">
+                                        <div>
+                                            <h6 class="m-0 fw-bold text-white-50 text-decoration-line-through">{{ report.title }}</h6>
+                                            <small class="text-muted"><i class="fa-solid fa-calendar-check me-1 text-success"></i>Selesai</small>
+                                        </div>
+                                        <button class="btn btn-xs btn-outline-success rounded-pill px-2 py-1 small open-detail" data-id="{{ report.id }}">
+                                            Lihat
+                                        </button>
+                                    </div>
+                                {% empty %}
+                                    <p class="text-muted text-center py-3 m-0 small">Belum ada laporan yang diselesaikan.</p>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -189,22 +229,24 @@
                         <div class="card card-custom p-4">
                             <h5 class="card-title text-maroon-light fw-bold mb-3"><i class="fa-solid fa-table me-2"></i>Ringkasan Tabel Laporan Kategori</h5>
                             <div class="table-responsive">
-                                <table class="table table-striped table-hover table-dark-custom rounded border border-secondary text-white">
+                                <table class="table table-striped table-hover table-dark-custom rounded border border-secondary text-white m-0">
                                     <thead>
                                         <tr class="table-secondary text-dark">
                                             <th>Nama Kategori</th>
-                                            <th class="text-center">Jumlah Kasus Terdata</th>
+                                            <th class="text-center" style="width: 250px;">Jumlah Kasus Terdata</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for stat in category_stats %}
                                         <tr>
-                                            <td class="fw-bold text-info">{{ stat.category }}</td>
-                                            <td class="text-center badge bg-danger d-inline-block m-2 px-3">{{ stat.count }} Laporan</td>
+                                            <td class="fw-bold text-info align-middle">{{ stat.category }}</td>
+                                            <td class="text-center align-middle">
+                                                <span class="badge bg-danger px-3 py-2 rounded-pill">{{ stat.count }} Laporan</span>
+                                            </td>
                                         </tr>
                                         {% empty %}
                                         <tr>
-                                            <td colspan="2" class="text-center text-muted">Belum ada statistik kategori masuk.</td>
+                                            <td colspan="2" class="text-center text-muted py-3">Belum ada statistik kategori masuk.</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -221,14 +263,14 @@
     <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content bg-dark text-white border-secondary">
-                <div class="modal-header border-secondary bg-maroon text-white">
-                    <h5 class="modal-title fw-bold" id="detailModalLabel">Detail Informasi Kasus</h5>
+                <div class="modal-header border-secondary bg-dark text-white">
+                    <h5 class="modal-title fw-bold text-maroon-light" id="detailModalLabel"><i class="fa-solid fa-circle-info me-2"></i>Detail Informasi Kasus</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-shadow="none" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalContent">
                     </div>
                 <div class="modal-footer border-secondary">
-                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Tutup Detail</button>
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Tutup Detail</button>
                 </div>
             </div>
         </div>
@@ -237,5 +279,46 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'js/dashboard.js' %}"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Mengambil data dinamis yang dikirim views Django ke tabel untuk dimasukkan ke Chart
+            const categories = [];
+            const counts = [];
+            
+            {% for stat in category_stats %}
+                categories.push("{{ stat.category }}");
+                counts.push({{ stat.count }});
+            {% endfor %}
+
+            // Pencegahan bug jika data kosong agar chart tidak error ter-render
+            if (categories.length === 0) {
+                categories.push("Belum Ada Data");
+                counts.push(0);
+            }
+
+            // Inisialisasi Category Chart
+            const ctxCategory = document.getElementById('categoryChart');
+            if (ctxCategory) {
+                new Chart(ctxCategory, {
+                    type: 'doughnut',
+                    data: {
+                        labels: categories,
+                        datasets: [{
+                            data: counts,
+                            backgroundColor: ['#e63946', '#f1faee', '#a8dadc', '#457b9d', '#1d3557'],
+                            borderWidth: 1,
+                            borderColor: 'rgba(255,255,255,0.1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { labels: { color: '#f8f9fa' } } }
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

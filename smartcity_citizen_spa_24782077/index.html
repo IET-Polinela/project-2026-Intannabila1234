@@ -1,72 +1,178 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartCity_Apuh - Citizen Portal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: radial-gradient(circle at top left, #4a1217 0%, #2d0b0e 38%, #1a0305 100%);
-            color: #f8f9fa;
-            min-height: 100vh;
-        }
-        .card-custom {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            border-radius: 1rem;
-        }
-        .text-maroon-light {
-            color: #ff8a95;
-        }
-    </style>
+    <title>SmartCity Dashboard</title>
+    <!-- Hubungkan ke stylesheet kamu -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Menggunakan Tailwind CSS CDN jika proyekmu memakainya -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body>
-    <nav class="navbar navbar-dark bg-dark border-bottom border-secondary shadow-sm">
-        <div class="container">
-            <span class="navbar-brand fw-bold text-uppercase"><i class="fa-solid fa-city text-maroon-light me-2"></i>SmartCity_Apuh</span>
+<body class="bg-gray-100 font-sans">
+
+    <!-- TOP NAVBAR (BAGIAN YANG DIUBAH MENJADI MAROON & TEKS BARU) -->
+    <nav class="bg-[#800000] text-white px-6 py-4 flex justify-between items-center shadow-md">
+        <div class="flex items-center space-x-2 font-bold text-lg">
+            <span>🏠 Selamat datang di smartcity APUH</span>
+        </div>
+        <div class="space-x-4 text-sm font-medium">
+            <a href="#" class="hover:underline">Dashboard</a>
+            <a href="#" class="hover:underline">Reports</a>
+            <a href="#" class="hover:underline">Login</a>
         </div>
     </nav>
 
-    <div class="container py-5">
-        <div class="p-5 mb-4 card-custom text-center">
-            <h1 class="display-5 fw-bold text-maroon-light">Selamat Datang di SmartCity_Apuh</h1>
-            <p class="col-md-8 mx-auto fs-5 text-muted">Portal Pengaduan Warga dan Pemantauan Layanan Masyarakat Kota secara Real-Time.</p>
-        </div>
+    <!-- MAIN CONTAINER -->
+    <div class="flex min-h-screen">
+        
+        <!-- SIDEBAR LEFT -->
+        <aside class="w-64 bg-[#1e2229] text-gray-300 p-6 flex flex-col items-center">
+            <!-- Admin Profile -->
+            <div class="flex flex-col items-center mb-8">
+                <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white mb-2">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                </div>
+                <h2 class="text-white font-semibold text-lg">Admin</h2>
+            </div>
 
-        <div class="card card-custom p-4 mt-4">
-            <h4 class="fw-bold mb-3 text-maroon-light"><i class="fa-solid fa-rss me-2"></i>Live Feed Laporan Warga</h4>
-            <div id="loadingStatus" class="text-info small"><i class="fa-solid fa-spinner fa-spin me-1"></i> Menghubungi backend server kampus...</div>
-            <ul id="reportFeedList" class="list-group list-group-flush bg-transparent mt-2"></ul>
-        </div>
+            <!-- Sidebar Navigation -->
+            <nav class="w-full space-y-2">
+                <a href="#" class="flex items-center space-x-3 bg-gray-700 text-white p-3 rounded-lg block font-medium">
+                    <span>📊</span> <span>Dashboard</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 hover:bg-gray-800 p-3 rounded-lg block font-medium">
+                    <span>📋</span> <span>Reports</span>
+                </a>
+            </nav>
+
+            <!-- Menu Utama Box -->
+            <div class="w-full bg-gray-800 p-4 rounded-lg mt-6 text-sm">
+                <h3 class="text-white font-bold mb-2">Menu Utama</h3>
+                <ul class="space-y-1 text-gray-400">
+                    <li>✓ Dashboard</li>
+                    <li>✓ Live Search</li>
+                    <li>✓ Modal Detail</li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 p-8">
+            <!-- Header Dashboard -->
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Dashboard</h1>
+                    <p class="text-gray-500 text-sm">Semua fitur berjalan di satu halaman tanpa pindah halaman.</p>
+                </div>
+                <div class="text-sm text-gray-500">
+                    <span class="text-blue-600 hover:underline cursor-pointer">Home</span> / Dashboard
+                </div>
+            </div>
+
+            <!-- INFO BANNER (DIBUAT COCOK DENGAN TEMA MAROON) -->
+            <div class="bg-red-50 border-l-4 border-[#800000] p-4 rounded-r-lg flex justify-between items-center mb-6 shadow-sm">
+                <p class="text-sm text-gray-700">
+                    <span class="font-bold text-[#800000]">Info:</span> Daftar laporan ada di bawah pada bagian <span class="font-semibold">Reports</span>. Klik tombol di sebelah kanan untuk langsung ke daftar laporan.
+                </p>
+                <button class="bg-[#800000] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#660000] transition">
+                    Lihat Reports
+                </button>
+            </div>
+
+            <!-- UTAMA UTILITY BAR -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="font-bold text-gray-800 text-lg">Utama</h2>
+                    <p class="text-gray-500 text-sm">Ringkasan kinerja laporan dan akses cepat ke laporan serta grafik statistik.</p>
+                </div>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm">
+                    Single Page App
+                </button>
+            </div>
+
+            <!-- STATISTIC CARDS (DENGAN SENTUHAN INDIKATOR MAROON) -->
+            <div class="grid grid-cols-4 gap-4 mb-8">
+                <!-- Total Laporan -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border-b-4 border-[#800000] flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-400 text-sm font-medium">Total Laporan</p>
+                        <h3 class="text-3xl font-bold text-gray-800 mt-1" id="total-laporan">125</h3>
+                    </div>
+                    <span class="text-2xl bg-red-50 p-3 rounded-lg text-[#800000]">📝</span>
+                </div>
+                <!-- Reported -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border-b-4 border-gray-500 flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-400 text-sm font-medium">Reported</p>
+                        <h3 class="text-3xl font-bold text-gray-800 mt-1" id="reported-count">45</h3>
+                    </div>
+                    <span class="text-2xl bg-gray-50 p-3 rounded-lg text-gray-500">⚠️</span>
+                </div>
+                <!-- Verified -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border-b-4 border-amber-500 flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-400 text-sm font-medium">Verified</p>
+                        <h3 class="text-3xl font-bold text-gray-800 mt-1" id="verified-count">60</h3>
+                    </div>
+                    <span class="text-2xl bg-amber-50 p-3 rounded-lg text-amber-500">🛡️</span>
+                </div>
+                <!-- Resolved -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border-b-4 border-emerald-600 flex justify-between items-center">
+                    <div>
+                        <p class="text-gray-400 text-sm font-medium">Resolved</p>
+                        <h3 class="text-3xl font-bold text-gray-800 mt-1" id="resolved-count">20</h3>
+                    </div>
+                    <span class="text-2xl bg-emerald-50 p-3 rounded-lg text-emerald-600">✅</span>
+                </div>
+            </div>
+
+            <!-- GRAPHICS SECTION -->
+            <div class="grid grid-cols-2 gap-6 mb-8">
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 mb-4">Laporan Per Bulan</h3>
+                    <canvas id="chartLaporanBulan"></canvas>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 mb-4">Status Laporan</h3>
+                    <canvas id="chartStatusLaporan"></canvas>
+                </div>
+            </div>
+
+            <!-- DAFTAR LAPORAN -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="text-xl font-bold text-gray-800 mb-1">Daftar Laporan</h3>
+                <p class="text-gray-500 text-sm mb-4">Lihat semua laporan dan kelola aksi langsung dari dashboard.</p>
+                
+                <div class="mb-4">
+                    <input type="text" placeholder="Cari laporan berdasarkan judul..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#800000]">
+                    <p class="text-xs text-gray-400 mt-1">Ketikan kata kunci, tunggu 500ms, hasil akan diperbarui.</p>
+                </div>
+
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 text-gray-700 font-semibold text-sm border-b border-gray-200">
+                            <th class="p-3">Judul</th>
+                            <th class="p-3">Lokasi</th>
+                            <th class="p-3">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm">
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="p-3">Lampu Jalan Rusak</td>
+                            <td class="p-3">Jl. Merdeka</td>
+                            <td class="p-3"><span class="px-2 py-1 bg-amber-100 text-amber-800 rounded text-xs">Verified</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
     </div>
 
-    <script>
-        // Memanggil API Gunicorn kamu yang berjalan di port 9009 / proxy Nginx 8009
-        const BACKEND_URL = 'http://103.151.63.87:8009/dashboard/api/reports/'; 
-
-        fetch(BACKEND_URL)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('loadingStatus').style.display = 'none';
-                const listContainer = document.getElementById('reportFeedList');
-                if(data.length === 0) {
-                    listContainer.innerHTML = '<li class="list-group-item bg-transparent text-muted text-center border-0">Belum ada data laporan.</li>';
-                    return;
-                }
-                data.slice(0, 5).forEach(item => {
-                    const li = document.createElement('li');
-                    li.className = 'list-group-item bg-transparent text-white border-secondary px-0 d-flex justify-content-between align-items-center';
-                    li.innerHTML = `<div><strong class="text-warning">${item.title}</strong> - <span class="text-muted small">${item.location}</span></div><span class="badge bg-danger rounded-pill">${item.category}</span>`;
-                    listContainer.appendChild(li);
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('loadingStatus').innerHTML = '<span class="text-danger"><i class="fa-solid fa-circle-xmark me-1"></i> Gagal memuat data backend.</span>';
-            });
-    </script>
+    <!-- Script Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Script Dashboard Kamu -->
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
