@@ -3,6 +3,7 @@ Dashboard views for the SmartCity dashboard.
 """
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
@@ -10,30 +11,36 @@ from django.shortcuts import redirect, render
 from main_app.models import Report
 
 
+def _create_report_from_request(request):
+    title = (request.POST.get('title') or '').strip()
+    category = (request.POST.get('category') or 'Umum').strip()
+    description = (request.POST.get('description') or '').strip()
+    location = (request.POST.get('location') or '').strip()
+    status = (request.POST.get('status') or 'REPORTED').strip()
+
+    if title and location:
+        Report.objects.create(
+            title=title,
+            category=category or 'Umum',
+            description=description,
+            location=location,
+            reporter=request.user if request.user.is_authenticated else None,
+            status=status,
+        )
+        messages.success(request, 'Laporan berhasil ditambahkan.')
+        return True
+
+    messages.error(request, 'Judul dan lokasi laporan wajib diisi.')
+    return False
+
+
 def dashboard(request):
     """
     Render the dashboard and handle report creation submissions.
     """
     if request.method == 'POST':
-        title = (request.POST.get('title') or '').strip()
-        category = (request.POST.get('category') or 'Umum').strip()
-        description = (request.POST.get('description') or '').strip()
-        location = (request.POST.get('location') or '').strip()
-        status = (request.POST.get('status') or 'REPORTED').strip()
-
-        if title and location:
-            Report.objects.create(
-                title=title,
-                category=category or 'Umum',
-                description=description,
-                location=location,
-                reporter=request.user if request.user.is_authenticated else None,
-                status=status,
-            )
-            messages.success(request, 'Laporan berhasil ditambahkan.')
+        if _create_report_from_request(request):
             return redirect('dashboard:dashboard')
-
-        messages.error(request, 'Judul dan lokasi laporan wajib diisi.')
         return redirect('dashboard:dashboard')
 
     total_reports = Report.objects.count()
@@ -73,6 +80,24 @@ def dashboard(request):
         'reports': reports,
     }
     return render(request, 'dashboard.html', context)
+
+
+@login_required
+def add_report(request):
+    """
+    Render the dedicated add-report page and process submissions.
+    Only admin users can submit reports from this flow.
+    """
+    if not getattr(request.user, 'is_admin', False):
+        messages.error(request, 'Akses ditolak. Hanya admin yang dapat menambahkan laporan.')
+        return redirect('dashboard:dashboard')
+
+    if request.method == 'POST':
+        if _create_report_from_request(request):
+            return redirect('dashboard:dashboard')
+        return redirect('dashboard:add_report')
+
+    return render(request, 'add_report.html')
 
 
 def dashboard_data(request):

@@ -9,6 +9,11 @@ from usermanagement_24782077.views import register, login_view
 from usermanagement.api_views import RegisterView, EmailTokenObtainPairView
 from main_app import views as main_views
 
+# --- TAMBAHAN IMPORT BARU LAB 14 (MULAI DI SINI) ---
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from django_scalar.views import scalar_viewer
+# --- AKHIR IMPORT BARU LAB 14 ---
+
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
@@ -37,4 +42,15 @@ urlpatterns = [
 
     # Short alias untuk register
     path('api/register/', RegisterView.as_view(), name='api-register-alias'),
+
+    # --- TAMBAHAN PATH ENDPOINT BARU LAB 14 (MULAI DI SINI) ---
+    # 1. Endpoint untuk meng-generate file skema mentah (JSON/YAML)
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    
+    # 2. Endpoint Swagger UI
+    path('api/docs/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    
+    # 3. Endpoint Scalar UI
+    path('api/docs/scalar/', scalar_viewer, name='scalar-ui'),
+    # --- AKHIR PATH ENDPOINT BARU LAB 14 ---
 ]

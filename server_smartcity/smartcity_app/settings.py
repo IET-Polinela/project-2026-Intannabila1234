@@ -34,6 +34,12 @@ INSTALLED_APPS = [
 
     # DRF + auth
     'rest_framework',
+    
+    # --- TAMBAHAN KODE BARU LAB 14 (MULAI DI SINI) ---
+    'drf_spectacular',
+    'django_scalar',
+    # --- AKHIR KODE BARU LAB 14 ---
+
     'rest_framework_simplejwt',
     'corsheaders',
 
@@ -55,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 ROOT_URLCONF = 'smartcity_app.urls'
 
 # ---------------------------------------------------------------------------
@@ -134,7 +141,8 @@ MESSAGE_TAGS = {
 # Auth
 # ---------------------------------------------------------------------------
 AUTH_USER_MODEL = 'usermanagement_24782077.User'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 
 # ---------------------------------------------------------------------------
@@ -154,6 +162,10 @@ CORS_ALLOW_CREDENTIALS = True
 # Django REST Framework
 # ---------------------------------------------------------------------------
 REST_FRAMEWORK = {
+    # --- TAMBAHAN KODE BARU LAB 14 ---
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    
+    # --- KODE LAMA TETAP AMAN DI BAWAH INI ---
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
@@ -169,4 +181,14 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME':  timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+# ---------------------------------------------------------------------------
+# SPECTACULAR SETTINGS (TAMBAHAN KODE BARU LAB 14)
+# ---------------------------------------------------------------------------
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Smart City Portal API',
+    'DESCRIPTION': 'Dokumentasi REST API resmi untuk Portal Pelaporan Laporan Warga',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }

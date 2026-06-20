@@ -63,8 +63,8 @@ def create_report(request):
                 status='REPORTED'
             )
             messages.success(request, 'Laporan berhasil dibuat!')
-        return redirect('dashboard:index')
-    return render(request, 'create_report.html')
+        return redirect('dashboard:dashboard')
+    return render(request, 'add_report.html')
 
 
 @_admin_required

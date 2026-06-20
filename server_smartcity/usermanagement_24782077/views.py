@@ -12,7 +12,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             messages.success(request, f'Selamat datang, {user.username}!')
-            return redirect('main_app:reports_list')
+            return redirect('dashboard:dashboard')
         messages.error(request, 'Username atau password salah.')
     return render(request, 'login.html')
 

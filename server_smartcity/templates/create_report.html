@@ -3,7 +3,7 @@
 {% block content %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'dashboard:dashboard' %}">Dashboard</a></li>
     <li class="breadcrumb-item active">Tambah Laporan</li>
   </ol>
 </nav>
@@ -35,7 +35,7 @@
                     </div>
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Simpan</button>
-                        <a href="{% url 'dashboard:index' %}" class="btn btn-secondary">Batal</a>
+                        <a href="{% url 'dashboard:dashboard' %}" class="btn btn-secondary">Batal</a>
                     </div>
                 </form>
             </div>
