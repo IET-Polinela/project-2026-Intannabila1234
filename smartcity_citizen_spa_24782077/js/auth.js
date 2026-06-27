@@ -19,7 +19,7 @@ export function renderLogin() {
         <form id="loginForm">
           <div class="mb-3 input-group shadow-sm">
             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-            <input id="loginEmail" type="email" class="form-control" placeholder="Email" required />
+            <input id="loginUsername" type="text" class="form-control" placeholder="Username" required />
           </div>
 
           <div class="mb-3 input-group shadow-sm">
@@ -57,8 +57,8 @@ export function setupLoginForm() {
   const demoEmail = localStorage.getItem('demo_email');
   const demoPass = localStorage.getItem('demo_password');
   if (demoEmail) {
-    const inputEmail = document.getElementById('loginEmail');
-    if (inputEmail) inputEmail.value = demoEmail;
+    const inputUsername = document.getElementById('loginUsername');
+    if (inputUsername) inputUsername.value = demoEmail;
   }
   if (demoPass) {
     const inputPass = document.getElementById('loginPassword');
@@ -68,7 +68,7 @@ export function setupLoginForm() {
   form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
 
-    const email = document.getElementById('loginEmail').value.trim();
+    const email = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
 
     if (!email || !password) {
